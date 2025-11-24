@@ -16,22 +16,4 @@ Lưu Game Tự Động: Dữ liệu được lưu vào trình duyệt, F5 không
 
 Âm Nhạc: Nhạc nền 8-bit và hiệu ứng âm thanh retro.
 
-🚀 Cách Sử Dụng
-
-Tải file Lime_Office_Survival.html về máy.
-
-Mở file bằng trình duyệt web bất kỳ (Chrome, Safari, Edge...).
-
-Nhập Tên Công Ty và Ngày Ký Hợp Đồng để bắt đầu game.
-
-Quay lại mỗi ngày để xem cấp độ và đọc nhật ký mới.
-
-🛠️ Nguồn Tài Nguyên
-
-Font: Nunito (Google Fonts).
-
-Âm thanh: Pixabay (Royalty Free).
-
-Hình ảnh: Placehold.co (Avatar giả lập).
-
 Code for fun. Stay Sour, Stay Strong! 🍋
