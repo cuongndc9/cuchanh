@@ -18,7 +18,6 @@
             --danger: #ef4444;
             --danger-shadow: #991b1b;
             --border-radius: 24px;
-            --game-shadow: 0 4px 0 var(--text-secondary);
         }
 
         * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
@@ -131,17 +130,17 @@
         input:focus { border-color: var(--lime-main); }
         label { font-weight: 800; margin-bottom: 8px; display: block; text-align: left; color: var(--text-secondary); text-transform: uppercase; font-size: 0.8rem; }
 
-        /* Custom Date Inputs Styles */
+        /* Custom Date Inputs */
         .date-inputs-group {
             display: flex;
             gap: 10px;
             width: 100%;
         }
-        .date-inputs-group input {
+        .date-input-small {
             text-align: center;
         }
-        .day-input, .month-input { width: 30% !important; }
-        .year-input { width: 40% !important; }
+        #dayInput, #monthInput { width: 30%; }
+        #yearInput { width: 40%; }
 
         /* --- DASHBOARD --- */
         #dashboard-screen { display: none; width: 100%; animation: slideUp 0.5s ease; }
@@ -336,9 +335,9 @@
                 <label>NGÀY KÝ HỢP ĐỒNG (Ngày / Tháng / Năm)</label>
                 <!-- 3 Ô nhập ngày riêng biệt để đảm bảo chuẩn format -->
                 <div class="date-inputs-group">
-                    <input type="number" id="dayInput" class="day-input" placeholder="DD" min="1" max="31" required>
-                    <input type="number" id="monthInput" class="month-input" placeholder="MM" min="1" max="12" required>
-                    <input type="number" id="yearInput" class="year-input" placeholder="YYYY" min="1990" max="2100" required>
+                    <input type="number" id="dayInput" class="date-input-small" placeholder="DD" min="1" max="31" required>
+                    <input type="number" id="monthInput" class="date-input-small" placeholder="MM" min="1" max="12" required>
+                    <input type="number" id="yearInput" class="date-input-small" placeholder="YYYY" min="1990" max="2100" required>
                 </div>
             </div>
 
@@ -415,13 +414,16 @@
 
     <script>
         // === CONFIG ===
-        const CURRENT_STORAGE_KEY = 'lime_survival_game_v4'; // Key mới nhất
+        // SỬ DỤNG MỘT KEY DUY NHẤT VÀ ỔN ĐỊNH
+        const MAIN_KEY = 'LIME_SURVIVAL_MAIN_SAVE';
+        // DANH SÁCH CÁC KEY CŨ ĐỂ TỰ ĐỘNG CHUYỂN DỮ LIỆU SANG KEY MỚI
         const LEGACY_KEYS = [
+            'lime_survival_game_v4',
             'lime_survival_game_v3',
             'lime_survival_game_final',
             'lime_survival_game_mode',
             'lime_survival_v2_light'
-        ]; // Các key cũ để tìm và migrate
+        ];
         
         const BABY_THRESHOLD = 90;
 
@@ -461,28 +463,37 @@
 
         // === CORE LOGIC ===
         document.addEventListener('DOMContentLoaded', () => {
-            // 1. Kiểm tra key hiện tại
-            let data = localStorage.getItem(CURRENT_STORAGE_KEY);
+            // 1. Cố gắng lấy dữ liệu từ Key chính
+            let dataString = localStorage.getItem(MAIN_KEY);
+            let data = null;
 
-            // 2. Nếu không có, đi tìm "gia tài" cũ từ các phiên bản trước
-            if (!data) {
-                for (let key of LEGACY_KEYS) {
-                    const legacyData = localStorage.getItem(key);
+            // 2. Nếu không có ở Key chính, đi lục lọi các Key cũ (Migration)
+            if (!dataString) {
+                for (let oldKey of LEGACY_KEYS) {
+                    const legacyData = localStorage.getItem(oldKey);
                     if (legacyData) {
-                        data = legacyData;
-                        // Migrate: Lưu ngay vào key mới
-                        localStorage.setItem(CURRENT_STORAGE_KEY, data);
-                        console.log("Đã khôi phục dữ liệu từ: " + key);
-                        break; 
+                        dataString = legacyData;
+                        // Lưu ngay lập tức sang nhà mới (Key chính)
+                        localStorage.setItem(MAIN_KEY, dataString);
+                        console.log("Đã chuyển nhà thành công từ: " + oldKey);
+                        break; // Tìm thấy là dừng luôn
                     }
                 }
             }
 
-            if (data) {
-                // LOAD GAME
-                showDashboard(JSON.parse(data));
-                document.getElementById('soundControl').classList.remove('hidden');
-                document.getElementById('soundControl').innerText = "🔇"; 
+            if (dataString) {
+                try {
+                    data = JSON.parse(dataString);
+                    // LOAD GAME NGAY
+                    showDashboard(data);
+                    document.getElementById('soundControl').classList.remove('hidden');
+                    document.getElementById('soundControl').innerText = "🔇"; 
+                } catch (e) {
+                    // Nếu dữ liệu lỗi, bắt buộc nhập lại
+                    console.error("Save file bị lỗi, reset game.");
+                    localStorage.removeItem(MAIN_KEY);
+                    showOnboarding();
+                }
             } else {
                 // NEW GAME
                 showOnboarding();
@@ -498,7 +509,6 @@
             e.preventDefault();
             const company = document.getElementById('companyInput').value;
             
-            // Lấy dữ liệu từ 3 ô input riêng biệt
             const d = document.getElementById('dayInput').value.padStart(2, '0');
             const m = document.getElementById('monthInput').value.padStart(2, '0');
             const y = document.getElementById('yearInput').value;
@@ -506,11 +516,11 @@
             if (!company || !d || !m || !y) return;
             if (d > 31 || m > 12) { alert("Ngày tháng ảo quá bạn ơi!"); return; }
 
-            // Lưu dạng chuẩn ISO (yyyy-mm-dd)
             const dateStr = `${y}-${m}-${d}`;
-            
             const data = { company, startDate: dateStr };
-            localStorage.setItem(CURRENT_STORAGE_KEY, JSON.stringify(data));
+            
+            // LƯU DỮ LIỆU
+            localStorage.setItem(MAIN_KEY, JSON.stringify(data));
             
             playIntroMusic();
 
@@ -528,7 +538,6 @@
             const now = new Date();
             document.getElementById('serverTime').innerText = now.toLocaleDateString('vi-VN');
 
-            // Parse ngày
             const [y, m, d] = data.startDate.split('-').map(Number);
             const start = new Date(y, m - 1, d); 
             
@@ -623,9 +632,8 @@
 
         function resignJob() {
             if (confirm("XÁC NHẬN: Bạn muốn hủy hợp đồng và chơi lại từ đầu?")) {
-                localStorage.removeItem(CURRENT_STORAGE_KEY); // Xóa key hiện tại
-                // Xóa luôn mấy key cũ cho sạch nợ
-                LEGACY_KEYS.forEach(k => localStorage.removeItem(k));
+                localStorage.removeItem(MAIN_KEY); // Xóa key chính
+                LEGACY_KEYS.forEach(k => localStorage.removeItem(k)); // Xóa key cũ cho sạch
                 location.reload();
             }
         }
