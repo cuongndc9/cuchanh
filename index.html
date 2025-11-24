@@ -2,315 +2,584 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gia Tộc Cụ Chanh</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nhật Ký Cụ Chanh - Office Survival</title>
+    <!-- Đổi font sang Nunito cho dễ nhìn & vui vẻ -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #8CB369; 
-            --bg: #121212;
-            --card: #1E1E1E;
-            --text: #E0E0E0;
-            --accent: #FFD700;
+            /* Light Mode Palette */
+            --bg-body: #F3F4F6;
+            --bg-card: #FFFFFF;
+            --text-primary: #1F2937;
+            --text-secondary: #6B7280;
+            --lime-primary: #84CC16; /* Màu chanh tươi sáng */
+            --lime-dark: #4D7C0F;
+            --danger: #EF4444;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            --input-bg: #F9FAFB;
+            --border: #E5E7EB;
         }
 
+        * { box-sizing: border-box; outline: none; }
+
         body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
+            /* Font Nunito bo tròn, dễ đọc */
+            font-family: 'Nunito', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-primary);
             margin: 0;
+            padding: 0;
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            justify-content: center;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
         .container {
             width: 100%;
-            max-width: 500px;
+            max-width: 450px;
             padding: 20px;
+            padding-bottom: 60px;
+            background-color: var(--bg-body);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        /* --- SCREEN: ONBOARDING --- */
+        #onboarding-screen {
+            display: flex; /* Mặc định hiện */
+            flex-direction: column;
+            justify-content: center;
+            height: 100vh;
+            width: 100%;
+            position: absolute;
+            top: 0; left: 0;
+            background: var(--bg-body);
+            z-index: 100;
+            padding: 30px;
             text-align: center;
         }
 
-        /* Avatar Cụ Chanh */
-        .main-avatar {
-            width: 250px;
-            height: 250px;
+        .welcome-img {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 20px;
             border-radius: 50%;
-            border: 5px solid var(--primary);
-            margin: 20px auto;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 0 30px rgba(140, 179, 105, 0.2);
-            transition: all 0.5s ease;
+            background: #eefec3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            animation: bounce 2s infinite;
         }
 
-        .main-avatar img {
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            font-size: 0.9rem; /* Tăng size chữ label chút */
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid var(--border);
+            border-radius: 15px; /* Bo góc mềm mại hơn */
+            font-size: 1rem;
+            background: var(--bg-card);
+            transition: border-color 0.3s;
+            font-family: inherit;
+        }
+
+        input:focus {
+            border-color: var(--lime-primary);
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 16px;
+            background: var(--lime-primary);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(132, 204, 22, 0.4);
+            transition: transform 0.2s;
+        }
+
+        .btn-primary:active { transform: scale(0.98); }
+
+        /* --- SCREEN: DASHBOARD --- */
+        #dashboard-screen {
+            display: none; /* Mặc định ẩn */
+            width: 100%;
+            animation: fadeIn 0.5s ease;
+        }
+
+        header {
+            text-align: center;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        .company-badge {
+            background: #DBEAFE;
+            color: #1E40AF;
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        /* Avatar Cụ Chanh */
+        .avatar-wrapper {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 20px;
+            position: relative;
+        }
+
+        .avatar-img {
             width: 100%;
             height: 100%;
+            border-radius: 50%;
+            border: 6px solid white;
+            box-shadow: var(--shadow);
             object-fit: cover;
+            background: #fff;
         }
 
-        /* Khu vực Chanh Con (Offspring) */
-        .baby-limes-zone {
+        .level-tag {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--lime-primary);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 800;
+            white-space: nowrap;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Stats */
+        .stats-box {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            margin-bottom: 25px;
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+
+        .counter {
+            font-size: 4rem; /* Số to hơn cho dễ nhìn */
+            font-weight: 800;
+            color: var(--lime-dark);
+            line-height: 1;
+        }
+
+        .counter-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 5px;
+            font-weight: 600;
+        }
+
+        /* Baby Limes */
+        .family-section {
+            background: #ECFCCB; /* Xanh siêu nhạt */
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border: 2px dashed #D9F99D;
+        }
+        
+        .section-header {
+            font-size: 0.9rem;
+            font-weight: 800;
+            color: var(--lime-dark);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .baby-grid {
             display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
             flex-wrap: wrap;
-            min-height: 40px;
+            gap: 10px;
+            justify-content: center;
         }
 
-        .baby-lime {
+        .baby-item {
+            width: 45px; /* Icon to hơn xíu */
+            height: 45px;
+            background: #FEF08A;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: relative;
+            cursor: help;
+        }
+        
+        .baby-item:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: #fff;
+            font-size: 11px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            white-space: nowrap;
+            margin-bottom: 5px;
+            z-index: 10;
+        }
+
+        /* Insight Card */
+        .insight-box {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            position: relative;
+            box-shadow: var(--shadow);
+            margin-bottom: 40px;
+        }
+
+        .quote-icon {
+            position: absolute;
+            top: -15px;
+            left: 20px;
             width: 40px;
             height: 40px;
-            background: var(--accent);
+            background: var(--lime-primary);
+            color: white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 20px;
-            position: relative;
-            animation: bounce 2s infinite;
-            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-        }
-
-        .baby-tooltip {
-            position: absolute;
-            bottom: -30px;
-            font-size: 0.6rem;
-            width: 60px;
-            background: #333;
-            padding: 2px;
-            border-radius: 4px;
-            opacity: 0;
-            transition: opacity 0.3s;
-            pointer-events: none;
-        }
-
-        .baby-lime:hover .baby-tooltip {
-            opacity: 1;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-        }
-
-        /* Stats & Insight */
-        .level-badge {
-            background: var(--primary);
-            color: #000;
-            padding: 5px 15px;
-            border-radius: 20px;
             font-weight: bold;
-            font-size: 0.9rem;
-            display: inline-block;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-        }
-
-        .count-display {
-            font-size: 3.5rem;
-            font-weight: 800;
-            line-height: 1;
-            margin: 10px 0;
-            background: -webkit-linear-gradient(#fff, #888);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .unit-label {
-            font-size: 1rem;
-            color: #666;
-            letter-spacing: 2px;
-        }
-
-        .insight-box {
-            background: var(--card);
-            padding: 20px;
-            border-radius: 15px;
-            margin-top: 30px;
-            border: 1px solid #333;
-            text-align: left;
-        }
-
-        .insight-day {
-            color: var(--primary);
-            font-size: 0.8rem;
-            font-weight: bold;
-            margin-bottom: 5px;
-            display: block;
         }
 
         .insight-content {
-            font-size: 1.1rem;
+            margin-top: 10px;
+            font-size: 1.15rem; /* Chữ to hơn cho dễ đọc */
             line-height: 1.6;
+            color: #374151;
             font-style: italic;
         }
 
-        .progress-bar {
-            width: 100%;
-            height: 6px;
-            background: #333;
-            border-radius: 3px;
-            margin-top: 30px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: var(--primary);
-            width: 0%;
-            transition: width 1s ease;
-        }
-
-        /* Footer */
-        .quote-author {
-            margin-top: 10px;
-            font-size: 0.8rem;
+        .insight-author {
+            margin-top: 15px;
             text-align: right;
-            color: #888;
+            font-size: 0.85rem;
+            color: #9CA3AF;
+            font-weight: 700;
         }
 
+        /* Footer / Reset */
+        .footer-action {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .btn-reset {
+            background: transparent;
+            border: 1px solid #fee2e2;
+            color: #ef4444;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        /* Animation */
+        @keyframes bounce { 0%, 100% {transform: translateY(0);} 50% {transform: translateY(-10px);} }
+        @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
+        
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div style="margin-bottom: 10px;">
-            <span class="level-badge" id="levelTitle">Level 1: Chanh Tập Sự</span>
-        </div>
+    <!-- SCREEN 1: ONBOARDING -->
+    <div id="onboarding-screen">
+        <div class="welcome-img">🍋</div>
+        <h2 style="margin-bottom: 10px;">Nhập Môn Tồn Tại</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 30px; font-size: 1rem; line-height: 1.5;">
+            Chào mừng đến với trại cai nghiện niềm vui. Hãy khai báo trung thực để hệ thống đo lường mức độ "chua" của bạn.
+        </p>
 
-        <div class="main-avatar" id="avatarBox">
-            <img id="mainImage" src="https://placehold.co/400x400/8CB369/FFF?text=Fresh+Lime" alt="Lime">
-        </div>
-
-        <div class="baby-limes-zone" id="babyZone">
+        <form id="onboardingForm">
+            <div class="form-group">
+                <label>Nơi đang "bán mình" (Tên Công Ty)</label>
+                <input type="text" id="companyInput" placeholder="VD: Tập đoàn Ép Khô..." required autocomplete="off">
             </div>
 
-        <div>
-            <div class="unit-label">BẠN ĐÃ TRỤ ĐƯỢC</div>
-            <div class="count-display" id="totalDays">0</div>
-            <div class="unit-label">NGÀY</div>
+            <div class="form-group">
+                <label>Ngày bắt đầu kiếp nạn (dd/mm/yyyy)</label>
+                <input type="date" id="dateInput" required>
+            </div>
+
+            <button type="submit" class="btn-primary">BẮT ĐẦU SINH TỒN</button>
+        </form>
+    </div>
+
+    <!-- SCREEN 2: DASHBOARD -->
+    <div class="container" id="dashboard-screen">
+        <header>
+            <div class="company-badge" id="displayCompany">CÔNG TY ABC</div>
+            <div style="font-size: 0.9rem; color: #9CA3AF;">Nhật ký sinh tồn</div>
+        </header>
+
+        <div class="avatar-wrapper">
+            <img id="avatarImg" class="avatar-img" src="https://placehold.co/400x400/eefec3/4D7C0F?text=Hello" alt="Lime">
+            <div class="level-tag" id="levelTag">Tấm Chiếu Mới</div>
         </div>
 
-        <div class="progress-bar">
-            <div class="progress-fill" id="nextBabyProgress"></div>
+        <div class="stats-box">
+            <div class="counter" id="dayCounter">0</div>
+            <div class="counter-label">NGÀY CHƯA BỊ SA THẢI</div>
+            <div style="font-size: 0.85rem; color: #9CA3AF; margin-top: 5px;" id="startDateDisplay">Kể từ ...</div>
         </div>
-        <div style="font-size: 0.7rem; color: #666; margin-top: 5px;">
-            Tiến độ đẻ chanh con tiếp theo
+
+        <div class="family-section">
+            <div class="section-header">
+                🌱 VƯỜN CHANH (Thành tựu & Vết sẹo)
+                <span style="float: right; font-weight: 400; font-size: 0.75rem;" id="nextBabyText">...</span>
+            </div>
+            <div class="baby-grid" id="babyGrid">
+                <!-- Baby items here -->
+            </div>
+            <div id="emptyGardenMsg" style="text-align: center; font-size: 0.9rem; color: #888; padding: 10px;">
+                Chưa đủ "chua" để đẻ chanh con...
+            </div>
         </div>
 
         <div class="insight-box">
-            <span class="insight-day" id="insightDayLabel">DAY #0</span>
-            <div class="insight-content" id="insightText">
-                Loading vũ trụ quan...
+            <div class="quote-icon">❝</div>
+            <div class="insight-content" id="dailyInsight">
+                Loading tín hiệu vũ trụ...
             </div>
-            <div class="quote-author">- Trích Nhật Ký Cụ Chanh -</div>
+            <div class="insight-author">- Cụ Chanh Đại Đế -</div>
+        </div>
+
+        <div class="footer-action">
+            <button class="btn-reset" onclick="resignJob()">🏳️ Nộp đơn xin nghỉ việc (Reset)</button>
         </div>
     </div>
 
     <script>
-        // === CẤU HÌNH ===
-        const START_DATE = new Date("2025-10-27T00:00:00").getTime();
-        const BABY_THRESHOLD = 60; // Cứ 60 ngày đẻ 1 chanh con (hoặc chỉnh thành 30, 90 tùy độ khó)
+        // CẤU HÌNH
+        const STORAGE_KEY = 'lime_survival_v2_light';
+        const BABY_THRESHOLD = 90; // 3 tháng đẻ 1 chanh con
 
-        // === KHO TÀNG INSIGHT (Mẫu đại diện, code sẽ tự random nếu hết) ===
-        // Bạn có thể thêm vào đây cho đủ 365 nếu muốn hardcode
-        const insightLibrary = [
-            "Khởi đầu nan, gian nan bắt đầu nản. Nhưng không sao, vỏ còn xanh, đời còn dài.",
-            "Hôm nay sếp cười với tôi. Không biết là cười khích lệ hay cười tiễn biệt.",
-            "Deadline là một khái niệm trừu tượng. Chỉ có tiếng tim đập là thật.",
-            "Phát hiện ra pantry công ty có loại trà ngon. Động lực đi làm tăng 1%.",
-            "Vắt kiệt sức? Không, tôi gọi đây là 'tối ưu hóa tài nguyên cơ thể'.",
-            "Mắt bắt đầu giật. Người ta bảo điềm lành, tôi nghĩ do thiếu magie hoặc thiếu ngủ.",
-            "Đã học được cách nói 'Em đang check' một cách đầy thuyết phục dù chưa mở máy.",
-            "Cảm giác 'Burn out' thực ra cũng ấm áp, giống như ngồi gần lò sưởi quá lâu.",
-            "Hôm nay tôi là một quả chanh. Chua ngoa với bug, nhưng ngọt ngào với lương.",
-            "Thấy đồng nghiệp về sớm. Lòng trĩu nặng nhưng tay vẫn gõ phím."
+        // DATA: Giai đoạn tiến hóa (Visual Prompt giả lập)
+        const PHASES = [
+            { day: 0, title: "Tấm Chiếu Mới", img: "https://placehold.co/400x400/84CC16/FFFFFF?text=Fresher+Lime" },
+            { day: 30, title: "Chanh Vắt Dở", img: "https://placehold.co/400x400/FACC15/000000?text=Squeezed+Lime" },
+            { day: 180, title: "Chanh Lì Lợm", img: "https://placehold.co/400x400/EA580C/FFFFFF?text=Tough+Skin" },
+            { day: 365, title: "Cụ Chanh Tổ", img: "https://placehold.co/400x400/4D7C0F/FFFFFF?text=Ancient+Lime" },
+            { day: 1000, title: "Hóa Thạch Sống", img: "https://placehold.co/400x400/57534E/FFFFFF?text=Fossil+Lime" }
         ];
 
-        function getLevelInfo(days) {
-            if (days < 30) return { title: "Level 1: Chanh Tập Sự", color: "#8CB369", imgText: "Fresh Lime" };
-            if (days < 90) return { title: "Level 2: Chanh Chiến Binh", color: "#F4E285", imgText: "Yellow Lemon" };
-            if (days < 180) return { title: "Level 3: Cụ Chanh", color: "#E6B800", imgText: "Elder Lemon" };
-            if (days < 365) return { title: "Level 4: Chanh Tổ Sư", color: "#BC4B51", imgText: "Master Lime" };
-            return { title: "Level 5: Chanh Hóa Thần", color: "#9932CC", imgText: "God Lime" };
-        }
-
-        function updateSystem() {
-            const now = new Date().getTime();
-            const distance = now - START_DATE;
-            
-            // Tính số ngày (làm tròn xuống)
-            const daysSurvived = Math.floor(distance / (1000 * 60 * 60 * 24));
-            // Tránh số âm nếu chưa đến ngày
-            const currentDay = daysSurvived > 0 ? daysSurvived : 0;
-
-            // 1. Cập nhật Số ngày
-            document.getElementById("totalDays").innerText = currentDay;
-
-            // 2. Cập nhật Level & Màu sắc
-            const level = getLevelInfo(currentDay);
-            document.getElementById("levelTitle").innerText = level.title;
-            document.documentElement.style.setProperty('--primary', level.color);
-            
-            // Cập nhật ảnh (Ở đây dùng placeholder, bạn thay link ảnh thật vào logic này)
-            // Ví dụ: if (level.title.includes("Level 1")) img.src = "link_anh_level_1.jpg"
-            const imgUrl = `https://placehold.co/400x400/${level.color.substring(1)}/FFF?text=${level.imgText}`;
-            // Chỉ cập nhật src nếu nó thay đổi để tránh nháy
-            if(document.getElementById("mainImage").getAttribute('src') !== imgUrl && currentDay > 0) {
-                 document.getElementById("mainImage").src = imgUrl;
-            }
-
-            // 3. Logic Đẻ Chanh Con
-            const babyCount = Math.floor(currentDay / BABY_THRESHOLD);
-            const babyZone = document.getElementById("babyZone");
-            
-            // Chỉ render lại nếu số lượng thay đổi
-            if (babyZone.children.length !== babyCount) {
-                babyZone.innerHTML = "";
-                for(let i = 0; i < babyCount; i++) {
-                    const baby = document.createElement("div");
-                    baby.className = "baby-lime";
-                    baby.innerHTML = "🍋<div class='baby-tooltip'>Baby #" + (i+1) + "</div>";
-                    // Delay animation cho vui mắt
-                    baby.style.animationDelay = (i * 0.2) + "s";
-                    babyZone.appendChild(baby);
-                }
-            }
-
-            // 4. Thanh tiến độ đẻ con tiếp theo
-            const daysIntoCycle = currentDay % BABY_THRESHOLD;
-            const percentage = (daysIntoCycle / BABY_THRESHOLD) * 100;
-            document.getElementById("nextBabyProgress").style.width = percentage + "%";
-
-            // 5. Logic Insight 365 (Dùng hàm băm đơn giản để chọn insight cố định cho mỗi ngày)
-            // Logic này giúp Day 5 luôn là câu A, Day 6 luôn là câu B, không bị random lung tung mỗi lần F5
-            document.getElementById("insightDayLabel").innerText = `NHẬT KÝ NGÀY THỨ ${currentDay}`;
-            
-            let dailyInsight = "";
-            if (currentDay < insightLibrary.length) {
-                dailyInsight = insightLibrary[currentDay];
+        // LOGIC CHẠY LẦN ĐẦU
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedData = localStorage.getItem(STORAGE_KEY);
+            if (savedData) {
+                // Đã có data -> Vào Dashboard
+                showDashboard(JSON.parse(savedData));
             } else {
-                // Nếu hết thư viện mẫu, tạo insight "Procedural"
-                const topics = ["sự kiên nhẫn", "họp hành", "fix bug", "OT", "cafe", "lương về"];
-                const actions = ["là vô nghĩa", "giúp tu tâm", "làm ta mạnh mẽ", "khiến ta hoài nghi nhân sinh"];
-                
-                // Chọn index dựa trên số ngày
-                const tIndex = currentDay % topics.length;
-                const aIndex = currentDay % actions.length;
-                
-                dailyInsight = `Ngày thứ ${currentDay}, tôi ngộ ra rằng ${topics[tIndex]} thực chất chỉ ${actions[aIndex]}.`;
+                // Chưa có data -> Hiện Onboarding
+                showOnboarding();
             }
+        });
+
+        // XỬ LÝ ONBOARDING
+        function showOnboarding() {
+            document.getElementById('onboarding-screen').classList.remove('hidden');
+            document.getElementById('dashboard-screen').style.display = 'none';
             
-            document.getElementById("insightText").innerText = dailyInsight;
+            // Set max date là hôm nay
+            document.getElementById('dateInput').max = new Date().toISOString().split("T")[0];
         }
 
-        // Chạy ngay và lặp lại
-        updateSystem();
-        setInterval(updateSystem, 60000); // Cập nhật mỗi phút
+        document.getElementById('onboardingForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const company = document.getElementById('companyInput').value;
+            const date = document.getElementById('dateInput').value;
 
+            if (company && date) {
+                const data = { company, startDate: date };
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+                
+                // Animation chuyển cảnh nhẹ
+                document.getElementById('onboarding-screen').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('onboarding-screen').classList.add('hidden');
+                    showDashboard(data);
+                }, 300);
+            }
+        });
+
+        // XỬ LÝ DASHBOARD
+        function showDashboard(data) {
+            document.getElementById('dashboard-screen').style.display = 'flex';
+            
+            // 1. Hiển thị thông tin cơ bản
+            document.getElementById('displayCompany').innerText = data.company;
+            const start = new Date(data.startDate);
+            
+            // Format ngày kiểu VN (dd/mm/yyyy)
+            const day = String(start.getDate()).padStart(2, '0');
+            const month = String(start.getMonth() + 1).padStart(2, '0');
+            const year = start.getFullYear();
+            
+            document.getElementById('startDateDisplay').innerText = `Kể từ ngày định mệnh: ${day}/${month}/${year}`;
+
+            // 2. Tính toán ngày
+            const now = new Date();
+            const diffTime = Math.abs(now - start);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) - 1; // -1 vì tính từ 0h hôm sau mới tròn 1 ngày
+            const safeDays = diffDays < 0 ? 0 : diffDays;
+
+            // Chạy hiệu ứng số
+            animateValue("dayCounter", 0, safeDays, 1500);
+
+            // 3. Update Visual (Avatar & Title)
+            updatePhase(safeDays);
+
+            // 4. Update Family (Baby Limes)
+            updateGarden(safeDays);
+
+            // 5. Generate Insight Khịa
+            generateBuaQuote(safeDays, data.company);
+        }
+
+        function updatePhase(days) {
+            // Tìm phase phù hợp nhất (lấy cái cuối cùng mà days >= phase.day)
+            let currentPhase = PHASES[0];
+            for (let p of PHASES) {
+                if (days >= p.day) currentPhase = p;
+            }
+
+            document.getElementById('levelTag').innerText = currentPhase.title;
+            // Thay placeholder bằng ảnh text cho vui
+            // Nếu muốn ảnh thật thì thay logic src ở đây
+            document.getElementById('avatarImg').src = currentPhase.img;
+        }
+
+        function updateGarden(days) {
+            const count = Math.floor(days / BABY_THRESHOLD);
+            const grid = document.getElementById('babyGrid');
+            grid.innerHTML = "";
+
+            if (count > 0) {
+                document.getElementById('emptyGardenMsg').style.display = 'none';
+                for (let i = 0; i < count; i++) {
+                    const baby = document.createElement('div');
+                    baby.className = 'baby-item';
+                    baby.innerText = getRandomIcon();
+                    baby.setAttribute('data-tooltip', `Bé #${i+1}: Sinh ngày ${(i+1)*BABY_THRESHOLD}`);
+                    grid.appendChild(baby);
+                }
+            } else {
+                document.getElementById('emptyGardenMsg').style.display = 'block';
+            }
+
+            // Next baby info
+            const nextDay = (count + 1) * BABY_THRESHOLD;
+            const remain = nextDay - days;
+            document.getElementById('nextBabyText').innerText = `Còn ${remain} ngày nữa đẻ tiếp`;
+        }
+
+        function getRandomIcon() {
+            const icons = ['🍋', '🌵', '💊', '☕', '🧟', '🤡'];
+            return icons[Math.floor(Math.random() * icons.length)];
+        }
+
+        // HỆ THỐNG CONTENT "BỰA" (Procedural Humor)
+        function generateBuaQuote(days, company) {
+            const today = new Date().getDay(); // 0 = CN, 6 = T7
+
+            let quote = "";
+
+            // 1. Check ngày đặc biệt trong tuần
+            if (today === 1) quote = "Thứ Hai là khởi đầu của mọi tội lỗi. Hãy giả vờ như bạn đang bận.";
+            else if (today === 5) quote = "Thứ Sáu máu chảy về đâu? Về ly trà sữa full topping chứ đâu.";
+            else if (today === 6 || today === 0) quote = "Cuối tuần mà vẫn vào đây xem đếm ngày à? Khổ thân chưa.";
+            
+            // 2. Check milestone quan trọng (Ưu tiên cao hơn ngày thường)
+            if (days === 0) quote = `Chào mừng đến với ${company}. Nụ cười của bạn hôm nay là đẹp nhất (vì mai sẽ mất).`;
+            else if (days === 7) quote = "Đã trụ được 1 tuần. Kỹ năng 'gật đầu lia lịa' đã lên Level 2.";
+            else if (days === 30) quote = "Tròn 1 tháng. Bạn đã biết nhà vệ sinh tầng nào wifi mạnh nhất.";
+            else if (days > 365 && days < 370) quote = "Chúc mừng 1 năm! Giờ bạn là đồ cổ, cần được bảo tồn.";
+            else if (!quote) {
+                // 3. Nếu không có gì đặc biệt -> Random lắp ghép câu (Khịa)
+                const subjects = ["Sếp bảo", "KH đổi ý", "Đồng nghiệp", "Cái máy in", "Deadline", "Lương về"];
+                const actions = ["làm tôi cười sặc sụa", "khiến tôi muốn đi tu", "như một trò đùa", "là ảo ảnh", "đang nhìn tôi đắm đuối"];
+                const results = [". Thật cảm lạnh.", ". Thôi đi pha cafe.", ". Chắc kiếp trước mình sống lỗi.", ". Tuyệt vời (không)."];
+
+                // Dùng số ngày làm seed để ngày nào câu đó cố định (không đổi khi f5)
+                const sIdx = days % subjects.length;
+                const aIdx = (days + 2) % actions.length;
+                const rIdx = (days + 1) % results.length;
+
+                quote = `Ngày thứ ${days}: ${subjects[sIdx]} ${actions[aIdx]}${results[rIdx]}`;
+            }
+
+            document.getElementById('dailyInsight').innerText = quote;
+        }
+
+        // Tiện ích: Chạy số tăng dần
+        function animateValue(id, start, end, duration) {
+            if (start === end) return;
+            const range = end - start;
+            let current = start;
+            const increment = end > start ? 1 : -1;
+            const stepTime = Math.abs(Math.floor(duration / range));
+            const obj = document.getElementById(id);
+            const timer = setInterval(function() {
+                current += increment;
+                obj.innerHTML = current;
+                if (current == end) {
+                    clearInterval(timer);
+                }
+            }, stepTime > 30 ? 30 : stepTime); // Min 30ms cho mượt
+        }
+
+        // Reset App
+        function resignJob() {
+            if (confirm("Bạn có chắc muốn 'Nộp đơn xin nghỉ'? Mọi dữ liệu cày cuốc sẽ bay màu!")) {
+                localStorage.removeItem(STORAGE_KEY);
+                location.reload();
+            }
+        }
     </script>
 </body>
 </html>
