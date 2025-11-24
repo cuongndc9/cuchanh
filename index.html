@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Nhật Ký Cụ Chanh - Office Survival</title>
-    <!-- Đổi font sang Nunito cho dễ nhìn & vui vẻ -->
+    <!-- Font Nunito bo tròn, dễ đọc & vui vẻ -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -24,7 +24,6 @@
         * { box-sizing: border-box; outline: none; }
 
         body {
-            /* Font Nunito bo tròn, dễ đọc */
             font-family: 'Nunito', sans-serif;
             background-color: var(--bg-body);
             color: var(--text-primary);
@@ -38,7 +37,7 @@
 
         .container {
             width: 100%;
-            max-width: 450px;
+            max-width: 768px; /* Max width kiểu iPad */
             padding: 20px;
             padding-bottom: 60px;
             background-color: var(--bg-body);
@@ -84,7 +83,7 @@
 
         label {
             display: block;
-            font-size: 0.9rem; /* Tăng size chữ label chút */
+            font-size: 0.9rem;
             font-weight: 700;
             margin-bottom: 8px;
             color: var(--text-secondary);
@@ -94,7 +93,7 @@
             width: 100%;
             padding: 15px;
             border: 2px solid var(--border);
-            border-radius: 15px; /* Bo góc mềm mại hơn */
+            border-radius: 15px;
             font-size: 1rem;
             background: var(--bg-card);
             transition: border-color 0.3s;
@@ -192,7 +191,7 @@
         }
 
         .counter {
-            font-size: 4rem; /* Số to hơn cho dễ nhìn */
+            font-size: 4rem;
             font-weight: 800;
             color: var(--lime-dark);
             line-height: 1;
@@ -207,7 +206,7 @@
 
         /* Baby Limes */
         .family-section {
-            background: #ECFCCB; /* Xanh siêu nhạt */
+            background: #ECFCCB;
             border-radius: 20px;
             padding: 20px;
             margin-bottom: 25px;
@@ -230,7 +229,7 @@
         }
 
         .baby-item {
-            width: 45px; /* Icon to hơn xíu */
+            width: 45px;
             height: 45px;
             background: #FEF08A;
             border-radius: 50%;
@@ -287,7 +286,7 @@
 
         .insight-content {
             margin-top: 10px;
-            font-size: 1.15rem; /* Chữ to hơn cho dễ đọc */
+            font-size: 1.15rem;
             line-height: 1.6;
             color: #374151;
             font-style: italic;
@@ -342,7 +341,7 @@
             </div>
 
             <div class="form-group">
-                <label>Ngày bắt đầu kiếp nạn (dd/mm/yyyy)</label>
+                <label>Ngày bắt đầu kiếp nạn (chọn ngày)</label>
                 <input type="date" id="dateInput" required>
             </div>
 
@@ -432,7 +431,7 @@
         document.getElementById('onboardingForm').addEventListener('submit', (e) => {
             e.preventDefault();
             const company = document.getElementById('companyInput').value;
-            const date = document.getElementById('dateInput').value;
+            const date = document.getElementById('dateInput').value; // Trả về dạng yyyy-mm-dd
 
             if (company && date) {
                 const data = { company, startDate: date };
@@ -453,19 +452,25 @@
             
             // 1. Hiển thị thông tin cơ bản
             document.getElementById('displayCompany').innerText = data.company;
-            const start = new Date(data.startDate);
             
-            // Format ngày kiểu VN (dd/mm/yyyy)
-            const day = String(start.getDate()).padStart(2, '0');
-            const month = String(start.getMonth() + 1).padStart(2, '0');
-            const year = start.getFullYear();
-            
-            document.getElementById('startDateDisplay').innerText = `Kể từ ngày định mệnh: ${day}/${month}/${year}`;
+            // --- FIX DATE FORMAT DD/MM/YYYY ---
+            // Data lưu dạng "yyyy-mm-dd", cần parse thủ công để tránh lệch múi giờ
+            const [y, m, d] = data.startDate.split('-').map(Number);
+            const start = new Date(y, m - 1, d); // Tạo Date object chuẩn local time 00:00:00
 
-            // 2. Tính toán ngày
+            // Format chuỗi hiển thị thủ công để đảm bảo đúng dd/mm/yyyy
+            const dayStr = String(d).padStart(2, '0');
+            const monthStr = String(m).padStart(2, '0');
+            
+            document.getElementById('startDateDisplay').innerText = `Kể từ ngày định mệnh: ${dayStr}/${monthStr}/${y}`;
+
+            // 2. Tính toán ngày (So sánh với ngày hiện tại - local time)
             const now = new Date();
-            const diffTime = Math.abs(now - start);
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) - 1; // -1 vì tính từ 0h hôm sau mới tròn 1 ngày
+            // Reset giờ phút giây của 'now' về 0 để tính tròn ngày
+            const nowMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            
+            const diffTime = nowMidnight - start; 
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)); 
             const safeDays = diffDays < 0 ? 0 : diffDays;
 
             // Chạy hiệu ứng số
@@ -505,7 +510,8 @@
                     const baby = document.createElement('div');
                     baby.className = 'baby-item';
                     baby.innerText = getRandomIcon();
-                    baby.setAttribute('data-tooltip', `Bé #${i+1}: Sinh ngày ${(i+1)*BABY_THRESHOLD}`);
+                    const bDay = (i+1)*BABY_THRESHOLD;
+                    baby.setAttribute('data-tooltip', `Bé #${i+1}: Sinh ngày thứ ${bDay}`);
                     grid.appendChild(baby);
                 }
             } else {
