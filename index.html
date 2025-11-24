@@ -4,25 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Nhật Ký Cụ Chanh - Game Edition</title>
-    <!-- Font Nunito bo tròn, đậm chất game -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-body: #f0fdf4; /* Xanh rất nhạt */
+            --bg-body: #f0fdf4;
             --bg-card: #ffffff;
             --text-primary: #1e293b;
             --text-secondary: #64748b;
-            
-            /* Game Colors */
             --lime-main: #84cc16;
             --lime-shadow: #4d7c0f;
             --accent-yellow: #facc15;
             --accent-yellow-shadow: #b45309;
             --danger: #ef4444;
             --danger-shadow: #991b1b;
-            
             --border-radius: 24px;
-            --game-shadow: 0 4px 0 var(--text-secondary); /* Bóng cứng kiểu game 2D */
+            --game-shadow: 0 4px 0 var(--text-secondary);
         }
 
         * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
@@ -30,7 +26,6 @@
         body {
             font-family: 'Nunito', sans-serif;
             background-color: var(--bg-body);
-            /* Grid Pattern Background */
             background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
             background-size: 20px 20px;
             color: var(--text-primary);
@@ -43,7 +38,7 @@
 
         .container {
             width: 100%;
-            max-width: 600px; /* Rộng hơn chút cho giống tablet game */
+            max-width: 600px;
             padding: 20px;
             padding-bottom: 80px;
             display: flex;
@@ -51,7 +46,7 @@
             align-items: center;
         }
 
-        /* --- UI COMPONENTS (GAME STYLE) --- */
+        /* --- UI COMPONENTS --- */
         .game-card {
             background: var(--bg-card);
             border: 3px solid var(--text-primary);
@@ -59,7 +54,7 @@
             padding: 20px;
             margin-bottom: 20px;
             width: 100%;
-            box-shadow: 6px 6px 0 rgba(0,0,0,0.1); /* Soft shadow */
+            box-shadow: 6px 6px 0 rgba(0,0,0,0.1);
             position: relative;
         }
 
@@ -84,10 +79,7 @@
             border-color: var(--lime-shadow);
         }
 
-        .btn-primary:active {
-            top: 6px;
-            box-shadow: 0 0 0 var(--lime-shadow);
-        }
+        .btn-primary:active { top: 6px; box-shadow: 0 0 0 var(--lime-shadow); }
 
         .btn-danger {
             background: #fee2e2;
@@ -97,12 +89,9 @@
             font-size: 0.9rem;
         }
         
-        .btn-danger:active {
-            top: 4px;
-            box-shadow: 0 0 0 var(--danger-shadow);
-        }
+        .btn-danger:active { top: 4px; box-shadow: 0 0 0 var(--danger-shadow); }
 
-        /* --- SCREEN: ONBOARDING --- */
+        /* --- ONBOARDING --- */
         #onboarding-screen {
             display: flex;
             flex-direction: column;
@@ -115,6 +104,9 @@
             z-index: 100;
             padding: 30px;
             text-align: center;
+            /* Thêm background vui nhộn */
+            background-image: radial-gradient(#84cc16 0.5px, transparent 0.5px);
+            background-size: 30px 30px;
         }
 
         .welcome-img {
@@ -137,9 +129,9 @@
         }
         
         input:focus { border-color: var(--lime-main); }
-        label { font-weight: 800; margin-bottom: 8px; display: block; text-align: left; color: var(--text-secondary); }
+        label { font-weight: 800; margin-bottom: 8px; display: block; text-align: left; color: var(--text-secondary); text-transform: uppercase; font-size: 0.8rem; }
 
-        /* --- SCREEN: DASHBOARD --- */
+        /* --- DASHBOARD --- */
         #dashboard-screen { display: none; width: 100%; animation: slideUp 0.5s ease; }
 
         header { text-align: center; margin-bottom: 25px; margin-top: 10px; }
@@ -156,7 +148,6 @@
             text-transform: uppercase;
         }
 
-        /* Avatar Section */
         .avatar-container {
             position: relative;
             width: 180px;
@@ -194,20 +185,13 @@
             box-shadow: 0 4px 0 rgba(0,0,0,0.1);
         }
 
-        /* Stats HUD */
-        .hud-stats {
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+        .hud-stats { text-align: center; display: flex; flex-direction: column; align-items: center; }
 
         .big-number {
             font-size: 4.5rem;
             font-weight: 900;
             color: var(--lime-main);
             line-height: 0.9;
-            /* Text Stroke effect */
             -webkit-text-stroke: 2px var(--text-primary); 
             text-shadow: 4px 4px 0 rgba(0,0,0,0.1);
         }
@@ -221,7 +205,6 @@
             letter-spacing: 1px;
         }
 
-        /* Inventory / Garden */
         .inventory-title {
             font-weight: 800;
             color: var(--text-primary);
@@ -233,28 +216,27 @@
 
         .inventory-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(45px, 1fr));
             gap: 10px;
             min-height: 50px;
         }
 
         .item-slot {
-            width: 40px;
-            height: 40px;
+            width: 45px;
+            height: 45px;
             background: #ecfccb;
             border: 2px solid #bef264;
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: 24px;
             cursor: help;
             transition: transform 0.2s;
         }
         
         .item-slot:hover { transform: scale(1.1); background: white; border-color: var(--lime-main); }
 
-        /* XP Bar */
         .xp-bar-container {
             width: 100%;
             height: 12px;
@@ -266,14 +248,8 @@
             position: relative;
         }
 
-        .xp-fill {
-            height: 100%;
-            background: var(--lime-main);
-            width: 0%;
-            transition: width 1s ease;
-        }
+        .xp-fill { height: 100%; background: var(--lime-main); width: 0%; transition: width 1s ease; }
 
-        /* Insight Log */
         .quest-log {
             font-style: italic;
             font-size: 1.1rem;
@@ -290,7 +266,24 @@
             font-weight: 700;
         }
 
-        /* Animations */
+        /* Music Control */
+        .sound-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border: 2px solid var(--text-primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 200;
+            box-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+        }
+
         @keyframes bounce { 0%, 100% {transform: translateY(0);} 50% {transform: translateY(-15px);} }
         @keyframes slideUp { from {transform: translateY(20px); opacity: 0;} to {transform: translateY(0); opacity: 1;} }
 
@@ -299,35 +292,49 @@
 </head>
 <body>
 
-    <!-- SCENE 1: START GAME -->
+    <!-- AUDIO PLAYER -->
+    <!-- Nhạc nền 8-bit vui nhộn, lặp lại vô tận như deadline -->
+    <audio id="bgMusic" loop>
+        <source src="https://opengameart.org/sites/default/files/Rolemusic_-_01_-_The_White.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <div id="soundControl" class="sound-toggle hidden" onclick="toggleSound()">
+        🔊
+    </div>
+
+    <!-- SCENE 1: ONBOARDING (Story Telling) -->
     <div id="onboarding-screen">
-        <div class="welcome-img">🎮</div>
-        <h1 style="font-weight: 900; color: var(--text-primary); margin: 0 0 10px 0;">OFFICE SURVIVAL</h1>
-        <p style="color: var(--text-secondary); margin-bottom: 30px; font-weight: 600;">
-            Nhập thông tin nhân vật để bắt đầu cốt truyện chính.
+        <div class="welcome-img">🍋</div>
+        <h1 style="font-weight: 900; color: var(--text-primary); margin: 0 0 10px 0; text-transform: uppercase;">
+            GAME CỤ CHANH
+        </h1>
+        <p style="color: var(--text-secondary); margin-bottom: 30px; font-weight: 600; font-size: 1.1rem;">
+            Chào mừng tân thủ. Bạn sắp bị ném vào "cối xay thịt".<br>Hãy khai báo tọa độ để hệ thống ghi nhận sự tồn tại mỏng manh này.
         </p>
 
         <form id="onboardingForm" style="width: 100%; max-width: 350px; margin: 0 auto;">
             <div style="margin-bottom: 20px;">
-                <label>CÔNG TY HIỆN TẠI (Tên Map)</label>
-                <input type="text" id="companyInput" placeholder="VD: Đấu trường La Mã..." required autocomplete="off">
+                <label>DUNGEON HIỆN TẠI (Tên Công Ty)</label>
+                <input type="text" id="companyInput" placeholder="VD: Động Bàn Tơ..." required autocomplete="off">
             </div>
 
             <div style="margin-bottom: 30px;">
-                <label>NGÀY ĐĂNG NHẬP</label>
+                <label>NGÀY KÝ HỢP ĐỒNG BÁN THÂN</label>
+                <!-- Hack hiển thị dd/mm/yyyy cho ô input -->
                 <input type="text" id="dateInput" placeholder="dd/mm/yyyy" onfocus="(this.type='date')" onblur="if(!this.value)this.type='text'" required>
             </div>
 
-            <button type="submit" class="btn-game btn-primary">VÀO GAME</button>
+            <button type="submit" class="btn-game btn-primary">KÝ TÊN BÁN MÌNH (START)</button>
         </form>
     </div>
 
     <!-- SCENE 2: MAIN HUD -->
     <div class="container" id="dashboard-screen">
         <header>
-            <div class="company-pill" id="displayCompany">Đang tải...</div>
+            <div class="company-pill" id="displayCompany">Loading Map...</div>
             <div style="font-weight: 700; font-size: 0.8rem; color: var(--text-secondary); margin-top: 8px;">
-                MÁY CHỦ: <span id="serverTime">...</span>
+                GIỜ TRÁI ĐẤT: <span id="serverTime">...</span>
             </div>
         </header>
 
@@ -336,22 +343,22 @@
             <div class="avatar-frame">
                 <img id="avatarImg" class="avatar-img" src="https://placehold.co/400x400/eefec3/4D7C0F?text=GA+MO" alt="Avatar">
             </div>
-            <div class="lvl-badge" id="levelTag">LV.1 TÂN THỦ</div>
+            <div class="lvl-badge" id="levelTag">LV.1 TÂN BINH</div>
         </div>
 
         <!-- MAIN STATS -->
         <div class="game-card hud-stats">
             <div class="big-number" id="dayCounter">0</div>
-            <div class="hud-label">CHUỖI NGÀY SINH TỒN (STREAK)</div>
+            <div class="hud-label">THỜI GIAN TRỤ HẠNG (NGÀY)</div>
             <div style="font-size: 0.8rem; font-weight: 700; color: #94a3b8; margin-top: 5px;" id="startDateDisplay">
-                Bắt đầu: --/--/----
+                Đăng nhập lần đầu: --/--/----
             </div>
         </div>
 
         <!-- INVENTORY (VƯỜN CHANH) -->
         <div class="game-card">
             <div class="inventory-title">
-                <span>🎒 KHO ĐỒ (CHANH)</span>
+                <span>🎒 THÀNH TỰU (CHANH CON)</span>
                 <span style="font-size: 0.8rem; color: var(--text-secondary);" id="babyCountDisplay">x0</span>
             </div>
             
@@ -359,12 +366,12 @@
                 <!-- Items injected here -->
             </div>
             <div id="emptyGardenMsg" style="text-align: center; color: #cbd5e1; font-weight: 700; font-size: 0.9rem; padding: 10px;">
-                (Trống rỗng)
+                (Chưa đẻ được gì...)
             </div>
 
             <!-- XP BAR -->
             <div style="margin-top: 15px; font-size: 0.75rem; font-weight: 800; color: var(--text-secondary); display: flex; justify-content: space-between;">
-                <span>TIẾN ĐỘ THU HOẠCH</span>
+                <span>TIẾN ĐỘ RỚT ĐỒ (DROP RATE)</span>
                 <span id="nextBabyText">...</span>
             </div>
             <div class="xp-bar-container">
@@ -378,36 +385,61 @@
                 📜 NHẬT KÝ CHIẾN TRƯỜNG
             </div>
             <div class="quest-log" id="dailyInsight">
-                Đang tải dữ liệu...
+                Đang giải mã tín hiệu...
             </div>
             <div class="quest-author">- NPC Cụ Chanh -</div>
         </div>
 
         <!-- FOOTER ACTIONS -->
         <div style="width: 100%; margin-top: 10px;">
-            <button class="btn-game btn-danger" onclick="resignJob()">🏳️ Nộp đơn xin nghỉ việc</button>
+            <button class="btn-game btn-danger" onclick="resignJob()">🏳️ HỦY HỢP ĐỒNG (RESET)</button>
         </div>
     </div>
 
     <script>
         // === CONFIG ===
-        const STORAGE_KEY = 'lime_survival_game_mode';
+        const STORAGE_KEY = 'lime_survival_game_final';
         const BABY_THRESHOLD = 90; // 90 ngày drop 1 item
 
         // VISUAL DATA
         const PHASES = [
-            { day: 0, title: "LV.1 TẤM CHIẾU MỚI", img: "https://placehold.co/400x400/84CC16/FFFFFF?text=Lv1+Ga+Mo" },
-            { day: 30, title: "LV.10 CHANH VẮT DỞ", img: "https://placehold.co/400x400/FACC15/000000?text=Lv10+Vat+Do" },
-            { day: 180, title: "LV.50 CHANH LÌ LỢM", img: "https://placehold.co/400x400/EA580C/FFFFFF?text=Lv50+Li+Lom" },
-            { day: 365, title: "LV.99 CỤ CHANH TỔ", img: "https://placehold.co/400x400/4D7C0F/FFFFFF?text=Lv99+Trum" },
-            { day: 1000, title: "LV.MAX HÓA THẠCH", img: "https://placehold.co/400x400/57534E/FFFFFF?text=Bat+Tu" }
+            { day: 0, title: "LV.1 CHANH TÂN BINH", img: "https://placehold.co/400x400/84CC16/FFFFFF?text=Lv1+Noob" },
+            { day: 30, title: "LV.10 CHANH VẮT DỞ", img: "https://placehold.co/400x400/FACC15/000000?text=Lv10+Squeezed" },
+            { day: 180, title: "LV.50 CHANH LÌ LỢM", img: "https://placehold.co/400x400/EA580C/FFFFFF?text=Lv50+Tank" },
+            { day: 365, title: "LV.99 CỤ CHANH TỔ", img: "https://placehold.co/400x400/4D7C0F/FFFFFF?text=Lv99+Boss" },
+            { day: 1000, title: "LV.MAX HÓA THẠCH", img: "https://placehold.co/400x400/57534E/FFFFFF?text=Immortal" }
         ];
+
+        // === SOUND CONTROLLER ===
+        const bgMusic = document.getElementById("bgMusic");
+        // Set volume nhỏ thôi kẻo điếc tai chốn công sở
+        bgMusic.volume = 0.4;
+
+        function toggleSound() {
+            if (bgMusic.paused) {
+                bgMusic.play();
+                document.getElementById('soundControl').innerText = "🔊";
+            } else {
+                bgMusic.pause();
+                document.getElementById('soundControl').innerText = "🔇";
+            }
+        }
+
+        function playIntroMusic() {
+            bgMusic.play().catch(error => {
+                console.log("Autoplay blocked, waiting for user interaction");
+            });
+            document.getElementById('soundControl').classList.remove('hidden');
+        }
 
         // === CORE LOGIC ===
         document.addEventListener('DOMContentLoaded', () => {
             const savedData = localStorage.getItem(STORAGE_KEY);
             if (savedData) {
                 showDashboard(JSON.parse(savedData));
+                // Hiện nút âm thanh luôn nếu đã login (nhưng không tự play được do policy browser)
+                document.getElementById('soundControl').classList.remove('hidden');
+                document.getElementById('soundControl').innerText = "🔇"; // Mặc định tắt để user tự bật
             } else {
                 showOnboarding();
             }
@@ -426,6 +458,10 @@
             if (company && date) {
                 const data = { company, startDate: date };
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+                
+                // MUSIC START!
+                playIntroMusic();
+
                 document.getElementById('onboarding-screen').style.opacity = '0';
                 setTimeout(() => {
                     document.getElementById('onboarding-screen').classList.add('hidden');
@@ -436,20 +472,19 @@
 
         function showDashboard(data) {
             document.getElementById('dashboard-screen').style.display = 'flex';
-            document.getElementById('displayCompany').innerText = data.company;
+            document.getElementById('displayCompany').innerText = "MAP: " + data.company;
             
-            // Server time (Today)
+            // Server time
             const now = new Date();
             document.getElementById('serverTime').innerText = now.toLocaleDateString('vi-VN');
 
-            // Parse Start Date (Fix timezone issue)
+            // Parse Start Date
             const [y, m, d] = data.startDate.split('-').map(Number);
             const start = new Date(y, m - 1, d); 
             
-            // Display Start Date
             const dStr = String(d).padStart(2, '0');
             const mStr = String(m).padStart(2, '0');
-            document.getElementById('startDateDisplay').innerText = `Bắt đầu: ${dStr}/${mStr}/${y}`;
+            document.getElementById('startDateDisplay').innerText = `Ngày ký hợp đồng: ${dStr}/${mStr}/${y}`;
 
             // Calculate Days
             const nowMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -483,9 +518,8 @@
                 for (let i = 0; i < count; i++) {
                     const slot = document.createElement('div');
                     slot.className = 'item-slot';
-                    // CHỈ DÙNG ICON CHANH (Theo feedback)
                     slot.innerText = '🍋'; 
-                    slot.title = `Chanh #${i+1} (Thu hoạch ngày ${(i+1)*BABY_THRESHOLD})`;
+                    slot.title = `Chanh Con #${i+1} (Rớt ngày thứ ${(i+1)*BABY_THRESHOLD})`;
                     grid.appendChild(slot);
                 }
             } else {
@@ -500,28 +534,29 @@
             document.getElementById('xpFill').style.width = `${percent}%`;
             
             const remain = BABY_THRESHOLD - daysInCycle;
-            document.getElementById('nextBabyText').innerText = `${remain} ngày nữa`;
+            document.getElementById('nextBabyText').innerText = `Còn ${remain} ngày nữa rớt đồ`;
         }
 
-        // GENERATE CONTENT (Vẫn giữ chất bựa)
+        // GENERATE CONTENT (Story Telling xéo xắc)
         function generateQuestLog(days, company) {
             let log = "";
             const today = new Date().getDay();
 
-            if (days === 0) log = `Hướng dẫn: Chào mừng đến map ${company}. Nhiệm vụ chính: Đừng để thanh Máu (Tinh thần) về 0.`;
-            else if (today === 1) log = "Sự kiện tuần: 'Thứ Hai Đen Tối'. Hiệu ứng xấu: Giảm 50% tốc độ làm việc.";
-            else if (today === 5) log = "Sự kiện sắp tới: 'Cuối Tuần'. Hiệu ứng tốt: Tăng 200% độ hưng phấn.";
+            if (days === 0) log = `TUTORIAL: Chào mừng đến ngục tối ${company}. Nhiệm vụ duy nhất: Đừng để thanh HP (Tinh Thần) tụt về 0.`;
+            else if (today === 1) log = "SỰ KIỆN TUẦN: 'Thứ Hai Đen Tối'. Debuff: Giảm 50% Mana, tăng 200% độ buồn ngủ.";
+            else if (today === 5) log = "SỰ KIỆN SẮP TỚI: 'Cuối Tuần Hạnh Phúc'. Buff: Hồi phục 100% HP nếu không bị Sếp gọi.";
+            else if (days > 365 && days < 370) log = "THÀNH TỰU: 'Kẻ Sống Sót 1 Năm'. Bạn nhận được danh hiệu 'Lão Làng' và một cái lưng đau.";
             else {
                 // Procedural generation
-                const monsters = ["Trùm Cuối (Sếp)", "Quái Tinh Anh (KH)", "NPC Đồng Nghiệp", "Quái vật Deadline"];
-                const actions = ["vừa tung chiêu diện rộng", "đang hồi năng lượng", "đang niệm chú 'Họp Gấp'", "đã gây sát thương chí mạng"];
-                const effects = ["khiến bạn choáng 3s.", "gây mất 100 vàng (trà sữa).", "nhưng bạn đã né được.", "Máu tinh thần giảm nhẹ."];
+                const monsters = ["Trùm Cuối (Sếp)", "Quái Tinh Anh (KH)", "NPC Đồng Nghiệp", "Quái Vật Deadline", "Máy In Hỏng"];
+                const actions = ["vừa tung chiêu AOE 'Họp Gấp'", "đang cast phép 'Sửa Gấp'", "đang niệm chú 'Lương Chưa Về'", "đã gây sát thương chí mạng vào tim"];
+                const effects = ["khiến bạn choáng 3s.", "gây mất 100 Gold (Trà Sữa).", "nhưng bạn đã né được bằng skill 'Giả Ngơ'.", "HP tinh thần giảm nhẹ."];
                 
                 const mIdx = days % monsters.length;
                 const aIdx = (days + 1) % actions.length;
                 const eIdx = (days + 2) % effects.length;
 
-                log = `Nhật Ký (Ngày ${days}): ${monsters[mIdx]} ${actions[aIdx]} ${effects[eIdx]}`;
+                log = `LOG CHIẾN ĐẤU (Ngày ${days}): ${monsters[mIdx]} ${actions[aIdx]} ${effects[eIdx]}`;
             }
 
             document.getElementById('dailyInsight').innerText = log;
@@ -542,7 +577,7 @@
         }
 
         function resignJob() {
-            if (confirm("Xác nhận: Hủy bỏ nhân vật này và reset server?")) {
+            if (confirm("XÁC NHẬN: Bạn muốn xóa file save này để chơi lại từ đầu (Reset)?")) {
                 localStorage.removeItem(STORAGE_KEY);
                 location.reload();
             }
