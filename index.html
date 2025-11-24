@@ -64,6 +64,7 @@
             border: 3px solid var(--text-primary);
             border-radius: 16px;
             font-size: 1.1rem;
+            font-family: 'Nunito', sans-serif; /* Đảm bảo font chuẩn */
             font-weight: 900;
             cursor: pointer;
             text-transform: uppercase;
@@ -104,7 +105,6 @@
             z-index: 100;
             padding: 30px;
             text-align: center;
-            /* Thêm background vui nhộn */
             background-image: radial-gradient(#84cc16 0.5px, transparent 0.5px);
             background-size: 30px 30px;
         }
@@ -130,6 +130,15 @@
         
         input:focus { border-color: var(--lime-main); }
         label { font-weight: 800; margin-bottom: 8px; display: block; text-align: left; color: var(--text-secondary); text-transform: uppercase; font-size: 0.8rem; }
+
+        /* Custom Date Inputs */
+        .date-inputs-group {
+            display: flex;
+            gap: 10px;
+        }
+        .date-input-small {
+            text-align: center;
+        }
 
         /* --- DASHBOARD --- */
         #dashboard-screen { display: none; width: 100%; animation: slideUp 0.5s ease; }
@@ -293,24 +302,25 @@
 <body>
 
     <!-- AUDIO PLAYER -->
-    <!-- Nhạc nền 8-bit vui nhộn, lặp lại vô tận như deadline -->
     <audio id="bgMusic" loop>
-        <source src="https://opengameart.org/sites/default/files/Rolemusic_-_01_-_The_White.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
+        <source src="https://cdn.pixabay.com/audio/2024/11/17/audio_aa5493b5c2.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="clickSound">
+        <source src="https://cdn.pixabay.com/audio/2024/12/19/audio_e076de63a9.mp3" type="audio/mpeg">
     </audio>
 
     <div id="soundControl" class="sound-toggle hidden" onclick="toggleSound()">
         🔊
     </div>
 
-    <!-- SCENE 1: ONBOARDING (Story Telling) -->
+    <!-- SCENE 1: ONBOARDING -->
     <div id="onboarding-screen">
         <div class="welcome-img">🍋</div>
         <h1 style="font-weight: 900; color: var(--text-primary); margin: 0 0 10px 0; text-transform: uppercase;">
             GAME CỤ CHANH
         </h1>
         <p style="color: var(--text-secondary); margin-bottom: 30px; font-weight: 600; font-size: 1.1rem;">
-            Chào mừng tân thủ. Bạn sắp bị ném vào "cối xay thịt".<br>Hãy khai báo tọa độ để hệ thống ghi nhận sự tồn tại mỏng manh này.
+            Chào mừng tân thủ.<br>Hãy khai báo tọa độ để hệ thống ghi nhận sự tồn tại mỏng manh này.
         </p>
 
         <form id="onboardingForm" style="width: 100%; max-width: 350px; margin: 0 auto;">
@@ -320,12 +330,16 @@
             </div>
 
             <div style="margin-bottom: 30px;">
-                <label>NGÀY KÝ HỢP ĐỒNG BÁN THÂN</label>
-                <!-- Hack hiển thị dd/mm/yyyy cho ô input -->
-                <input type="text" id="dateInput" placeholder="dd/mm/yyyy" onfocus="(this.type='date')" onblur="if(!this.value)this.type='text'" required>
+                <label>NGÀY KÝ HỢP ĐỒNG (Ngày / Tháng / Năm)</label>
+                <!-- 3 Ô nhập ngày riêng biệt để đảm bảo chuẩn format -->
+                <div class="date-inputs-group">
+                    <input type="number" id="dayInput" class="date-input-small" placeholder="DD" min="1" max="31" required>
+                    <input type="number" id="monthInput" class="date-input-small" placeholder="MM" min="1" max="12" required>
+                    <input type="number" id="yearInput" class="date-input-small" placeholder="YYYY" min="1990" max="2100" required>
+                </div>
             </div>
 
-            <button type="submit" class="btn-game btn-primary">KÝ TÊN BÁN MÌNH (START)</button>
+            <button type="submit" class="btn-game btn-primary" onclick="playClick()">KÝ TÊN BÁN MÌNH (START)</button>
         </form>
     </div>
 
@@ -392,13 +406,13 @@
 
         <!-- FOOTER ACTIONS -->
         <div style="width: 100%; margin-top: 10px;">
-            <button class="btn-game btn-danger" onclick="resignJob()">🏳️ HỦY HỢP ĐỒNG (RESET)</button>
+            <button class="btn-game btn-danger" onclick="playClick(); resignJob()">🏳️ HỦY HỢP ĐỒNG</button>
         </div>
     </div>
 
     <script>
         // === CONFIG ===
-        const STORAGE_KEY = 'lime_survival_game_final';
+        const STORAGE_KEY = 'lime_survival_game_v3'; // Key mới để tránh cache cũ lỗi
         const BABY_THRESHOLD = 90; // 90 ngày drop 1 item
 
         // VISUAL DATA
@@ -412,8 +426,8 @@
 
         // === SOUND CONTROLLER ===
         const bgMusic = document.getElementById("bgMusic");
-        // Set volume nhỏ thôi kẻo điếc tai chốn công sở
-        bgMusic.volume = 0.4;
+        const clickSound = document.getElementById("clickSound");
+        bgMusic.volume = 0.5;
 
         function toggleSound() {
             if (bgMusic.paused) {
@@ -426,21 +440,25 @@
         }
 
         function playIntroMusic() {
-            bgMusic.play().catch(error => {
-                console.log("Autoplay blocked, waiting for user interaction");
-            });
+            bgMusic.play().catch(error => { console.log("Cần tương tác để phát nhạc"); });
             document.getElementById('soundControl').classList.remove('hidden');
+        }
+
+        function playClick() {
+            clickSound.currentTime = 0;
+            clickSound.play().catch(e => {}); // Bỏ qua lỗi nếu chưa tương tác
         }
 
         // === CORE LOGIC ===
         document.addEventListener('DOMContentLoaded', () => {
             const savedData = localStorage.getItem(STORAGE_KEY);
             if (savedData) {
+                // ĐÃ CÓ DATA -> VÀO THẲNG GAME (CACHING WORKING)
                 showDashboard(JSON.parse(savedData));
-                // Hiện nút âm thanh luôn nếu đã login (nhưng không tự play được do policy browser)
                 document.getElementById('soundControl').classList.remove('hidden');
-                document.getElementById('soundControl').innerText = "🔇"; // Mặc định tắt để user tự bật
+                document.getElementById('soundControl').innerText = "🔇"; 
             } else {
+                // CHƯA CÓ DATA -> HIỆN FORM
                 showOnboarding();
             }
         });
@@ -448,37 +466,44 @@
         function showOnboarding() {
             document.getElementById('onboarding-screen').classList.remove('hidden');
             document.getElementById('dashboard-screen').style.display = 'none';
-            document.getElementById('dateInput').max = new Date().toISOString().split("T")[0];
         }
 
         document.getElementById('onboardingForm').addEventListener('submit', (e) => {
             e.preventDefault();
             const company = document.getElementById('companyInput').value;
-            const date = document.getElementById('dateInput').value;
-            if (company && date) {
-                const data = { company, startDate: date };
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-                
-                // MUSIC START!
-                playIntroMusic();
+            
+            // Lấy dữ liệu từ 3 ô input riêng biệt
+            const d = document.getElementById('dayInput').value.padStart(2, '0');
+            const m = document.getElementById('monthInput').value.padStart(2, '0');
+            const y = document.getElementById('yearInput').value;
 
-                document.getElementById('onboarding-screen').style.opacity = '0';
-                setTimeout(() => {
-                    document.getElementById('onboarding-screen').classList.add('hidden');
-                    showDashboard(data);
-                }, 300);
-            }
+            // Validate sơ bộ
+            if (!company || !d || !m || !y) return;
+            if (d > 31 || m > 12) { alert("Ngày tháng không hợp lệ nha bạn ơi!"); return; }
+
+            // Lưu dạng chuẩn ISO để tính toán (yyyy-mm-dd)
+            const dateStr = `${y}-${m}-${d}`;
+            
+            const data = { company, startDate: dateStr };
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            
+            playIntroMusic();
+
+            document.getElementById('onboarding-screen').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('onboarding-screen').classList.add('hidden');
+                showDashboard(data);
+            }, 300);
         });
 
         function showDashboard(data) {
             document.getElementById('dashboard-screen').style.display = 'flex';
             document.getElementById('displayCompany').innerText = "MAP: " + data.company;
             
-            // Server time
             const now = new Date();
             document.getElementById('serverTime').innerText = now.toLocaleDateString('vi-VN');
 
-            // Parse Start Date
+            // Parse ngày từ chuỗi ISO
             const [y, m, d] = data.startDate.split('-').map(Number);
             const start = new Date(y, m - 1, d); 
             
@@ -486,13 +511,12 @@
             const mStr = String(m).padStart(2, '0');
             document.getElementById('startDateDisplay').innerText = `Ngày ký hợp đồng: ${dStr}/${mStr}/${y}`;
 
-            // Calculate Days
+            // Tính số ngày
             const nowMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
             const diffTime = nowMidnight - start; 
             const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)); 
             const safeDays = diffDays < 0 ? 0 : diffDays;
 
-            // Render UI
             animateValue("dayCounter", 0, safeDays, 1000);
             updatePhase(safeDays);
             updateInventory(safeDays);
@@ -528,7 +552,6 @@
             
             document.getElementById('babyCountDisplay').innerText = `x${count}`;
 
-            // XP Bar Logic
             const daysInCycle = days % BABY_THRESHOLD;
             const percent = (daysInCycle / BABY_THRESHOLD) * 100;
             document.getElementById('xpFill').style.width = `${percent}%`;
@@ -537,7 +560,6 @@
             document.getElementById('nextBabyText').innerText = `Còn ${remain} ngày nữa rớt đồ`;
         }
 
-        // GENERATE CONTENT (Story Telling xéo xắc)
         function generateQuestLog(days, company) {
             let log = "";
             const today = new Date().getDay();
@@ -547,7 +569,6 @@
             else if (today === 5) log = "SỰ KIỆN SẮP TỚI: 'Cuối Tuần Hạnh Phúc'. Buff: Hồi phục 100% HP nếu không bị Sếp gọi.";
             else if (days > 365 && days < 370) log = "THÀNH TỰU: 'Kẻ Sống Sót 1 Năm'. Bạn nhận được danh hiệu 'Lão Làng' và một cái lưng đau.";
             else {
-                // Procedural generation
                 const monsters = ["Trùm Cuối (Sếp)", "Quái Tinh Anh (KH)", "NPC Đồng Nghiệp", "Quái Vật Deadline", "Máy In Hỏng"];
                 const actions = ["vừa tung chiêu AOE 'Họp Gấp'", "đang cast phép 'Sửa Gấp'", "đang niệm chú 'Lương Chưa Về'", "đã gây sát thương chí mạng vào tim"];
                 const effects = ["khiến bạn choáng 3s.", "gây mất 100 Gold (Trà Sữa).", "nhưng bạn đã né được bằng skill 'Giả Ngơ'.", "HP tinh thần giảm nhẹ."];
@@ -577,7 +598,7 @@
         }
 
         function resignJob() {
-            if (confirm("XÁC NHẬN: Bạn muốn xóa file save này để chơi lại từ đầu (Reset)?")) {
+            if (confirm("XÁC NHẬN: Bạn muốn hủy hợp đồng và chơi lại từ đầu?")) {
                 localStorage.removeItem(STORAGE_KEY);
                 location.reload();
             }
