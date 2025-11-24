@@ -314,9 +314,8 @@
             </div>
 
             <div style="margin-bottom: 30px;">
-                <label>NGÀY ĐĂNG NHẬP (Ngày/Tháng/Năm)</label>
-                <!-- Lưu ý: Định dạng hiển thị trong ô này phụ thuộc vào cài đặt của thiết bị -->
-                <input type="date" id="dateInput" required>
+                <label>NGÀY ĐĂNG NHẬP</label>
+                <input type="text" id="dateInput" placeholder="dd/mm/yyyy" onfocus="(this.type='date')" onblur="if(!this.value)this.type='text'" required>
             </div>
 
             <button type="submit" class="btn-game btn-primary">VÀO GAME</button>
