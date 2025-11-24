@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhật Ký Cụ Chanh</title>
+    <style>
+        /* Cấu hình Mobile First & Giao diện vui vẻ */
+        :root {
+            --primary-color: #F4D03F; /* Màu vàng chanh */
+            --secondary-color: #27AE60; /* Màu xanh lá */
+            --bg-color: #FCF3CF;
+            --text-color: #424949;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 400px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        h1 {
+            color: var(--secondary-color);
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .lemon-avatar {
+            width: 200px;
+            height: 200px;
+            background-color: #eee;
+            border-radius: 50%;
+            margin: 20px auto;
+            overflow: hidden;
+            border: 5px solid var(--primary-color);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .lemon-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .counter-box {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        .timer {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #E67E22;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .timer span {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 1.5rem;
+        }
+        
+        .timer span b {
+            font-size: 2.5rem;
+            line-height: 1;
+        }
+        
+        .timer span small {
+            font-size: 0.8rem;
+            color: #7f8c8d;
+            font-weight: normal;
+        }
+
+        .insight-card {
+            background: var(--primary-color);
+            color: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .insight-card::after {
+            content: "💡 Insight";
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #E67E22;
+            padding: 2px 10px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+        }
+
+        .footer {
+            margin-top: auto;
+            padding: 20px;
+            font-size: 0.8rem;
+            color: #7f8c8d;
+        }
+
+        /* Hiệu ứng rung nhẹ nếu quá tải */
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+        
+        .shaking {
+            animation: shake 0.5s;
+            animation-iteration-count: infinite;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Hành Trình "Cụ Chanh"</h1>
+        <p>Bắt đầu nhập môn từ: <strong>27/10/2025</strong></p>
+
+        <div class="lemon-avatar" id="avatarBox">
+            <img src="https://placehold.co/400x400/F4D03F/FFF?text=Fresh+Lemon" alt="Trạng thái hiện tại" id="statusImage">
+        </div>
+
+        <div class="counter-box">
+            <p>Bạn đã trụ được:</p>
+            <div class="timer" id="timer">
+                Đang tính toán...
+            </div>
+        </div>
+
+        <div class="insight-card" id="insightText">
+            Đang check độ tươi...
+        </div>
+    </div>
+
+    <div class="footer">
+        Hy vọng môi trường nhiều cơ hội, chứ đừng vắt em khô người 🙏
+    </div>
+
+    <script>
+        // Ngày bắt đầu: 27/10/2025
+        const startDate = new Date("2025-10-27T08:00:00").getTime();
+
+        function updateTimer() {
+            const now = new Date().getTime();
+            const distance = now - startDate;
+
+            if (distance < 0) {
+                document.getElementById("timer").innerHTML = "Chưa đến ngày đi làm!";
+                return;
+            }
+
+            // Tính toán thời gian
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Hiển thị
+            document.getElementById("timer").innerHTML = `
+                <span><b>${days}</b><small>Ngày</small></span>
+                <span><b>${hours}</b><small>Giờ</small></span>
+                <span><b>${minutes}</b><small>Phút</small></span>
+                <span><b>${seconds}</b><small>Giây</small></span>
+            `;
+
+            updateInsight(days);
+        }
+
+        function updateInsight(days) {
+            const insightEl = document.getElementById("insightText");
+            const imgEl = document.getElementById("statusImage");
+            const avatarBox = document.getElementById("avatarBox");
+
+            let message = "";
+            let imgText = "Lemon";
+
+            // Logic vui vẻ dựa trên số ngày
+            if (days < 7) {
+                message = "Vẫn còn tươi roi rói! Tràn trề vitamin C.";
+                imgText = "Happy+Lemon";
+                avatarBox.classList.remove("shaking");
+            } else if (days < 30) {
+                message = "Bắt đầu hơi chua chua rồi đấy. Cẩn thận!";
+                imgText = "Sweating+Lemon";
+                avatarBox.classList.remove("shaking");
+            } else if (days < 90) {
+                message = "Đã thành 'Cụ Chanh'. Nước cốt sắp cạn!";
+                imgText = "Tired+Lemon";
+                avatarBox.classList.add("shaking"); // Rung lắc vì stress
+            } else {
+                message = "SOS! Chỉ còn lại vỏ, cần nghỉ ngơi gấp!";
+                imgText = "Dried+Lemon";
+                avatarBox.classList.add("shaking");
+            }
+            
+            // Cập nhật text nếu nó thay đổi
+            if (insightEl.innerText !== message) {
+                insightEl.innerText = message;
+                // Ở đây bạn có thể thay link ảnh thật vào
+                imgEl.src = `https://placehold.co/400x400/F4D03F/FFF?text=${imgText}`; 
+            }
+        }
+
+        // Cập nhật mỗi giây
+        setInterval(updateTimer, 1000);
+        updateTimer(); // Chạy ngay lập tức
+    </script>
+</body>
+</html>
