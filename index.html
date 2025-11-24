@@ -3,239 +3,314 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nhật Ký Cụ Chanh</title>
+    <title>Gia Tộc Cụ Chanh</title>
     <style>
-        /* Cấu hình Mobile First & Giao diện vui vẻ */
         :root {
-            --primary-color: #F4D03F; /* Màu vàng chanh */
-            --secondary-color: #27AE60; /* Màu xanh lá */
-            --bg-color: #FCF3CF;
-            --text-color: #424949;
+            --primary: #8CB369; 
+            --bg: #121212;
+            --card: #1E1E1E;
+            --text: #E0E0E0;
+            --accent: #FFD700;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
             margin: 0;
-            padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            text-align: center;
         }
 
         .container {
-            width: 90%;
-            max-width: 400px;
+            width: 100%;
+            max-width: 500px;
             padding: 20px;
-            margin-top: 20px;
+            text-align: center;
         }
 
-        h1 {
-            color: var(--secondary-color);
-            font-size: 1.8rem;
-            margin-bottom: 10px;
-        }
-
-        .lemon-avatar {
-            width: 200px;
-            height: 200px;
-            background-color: #eee;
+        /* Avatar Cụ Chanh */
+        .main-avatar {
+            width: 250px;
+            height: 250px;
             border-radius: 50%;
+            border: 5px solid var(--primary);
             margin: 20px auto;
+            position: relative;
             overflow: hidden;
-            border: 5px solid var(--primary-color);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 0 30px rgba(140, 179, 105, 0.2);
+            transition: all 0.5s ease;
         }
 
-        .lemon-avatar img {
+        .main-avatar img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
 
-        .counter-box {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            margin-bottom: 20px;
-        }
-
-        .timer {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #E67E22;
+        /* Khu vực Chanh Con (Offspring) */
+        .baby-limes-zone {
             display: flex;
             justify-content: center;
             gap: 10px;
+            margin-bottom: 20px;
             flex-wrap: wrap;
+            min-height: 40px;
         }
 
-        .timer span {
+        .baby-lime {
+            width: 40px;
+            height: 40px;
+            background: var(--accent);
+            border-radius: 50%;
             display: flex;
-            flex-direction: column;
             align-items: center;
-            font-size: 1.5rem;
-        }
-        
-        .timer span b {
-            font-size: 2.5rem;
-            line-height: 1;
-        }
-        
-        .timer span small {
-            font-size: 0.8rem;
-            color: #7f8c8d;
-            font-weight: normal;
-        }
-
-        .insight-card {
-            background: var(--primary-color);
-            color: #fff;
-            padding: 15px;
-            border-radius: 10px;
-            font-weight: bold;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            justify-content: center;
+            font-size: 20px;
             position: relative;
+            animation: bounce 2s infinite;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
         }
-        
-        .insight-card::after {
-            content: "💡 Insight";
+
+        .baby-tooltip {
             position: absolute;
-            top: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #E67E22;
-            padding: 2px 10px;
-            border-radius: 10px;
-            font-size: 0.8rem;
+            bottom: -30px;
+            font-size: 0.6rem;
+            width: 60px;
+            background: #333;
+            padding: 2px;
+            border-radius: 4px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
         }
 
-        .footer {
-            margin-top: auto;
+        .baby-lime:hover .baby-tooltip {
+            opacity: 1;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* Stats & Insight */
+        .level-badge {
+            background: var(--primary);
+            color: #000;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .count-display {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1;
+            margin: 10px 0;
+            background: -webkit-linear-gradient(#fff, #888);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .unit-label {
+            font-size: 1rem;
+            color: #666;
+            letter-spacing: 2px;
+        }
+
+        .insight-box {
+            background: var(--card);
             padding: 20px;
-            font-size: 0.8rem;
-            color: #7f8c8d;
+            border-radius: 15px;
+            margin-top: 30px;
+            border: 1px solid #333;
+            text-align: left;
         }
 
-        /* Hiệu ứng rung nhẹ nếu quá tải */
-        @keyframes shake {
-            0% { transform: translate(1px, 1px) rotate(0deg); }
-            10% { transform: translate(-1px, -2px) rotate(-1deg); }
-            20% { transform: translate(-3px, 0px) rotate(1deg); }
-            30% { transform: translate(3px, 2px) rotate(0deg); }
-            40% { transform: translate(1px, -1px) rotate(1deg); }
-            50% { transform: translate(-1px, 2px) rotate(-1deg); }
-            60% { transform: translate(-3px, 1px) rotate(0deg); }
-            70% { transform: translate(3px, 1px) rotate(-1deg); }
-            80% { transform: translate(-1px, -1px) rotate(1deg); }
-            90% { transform: translate(1px, 2px) rotate(0deg); }
-            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        .insight-day {
+            color: var(--primary);
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
         }
-        
-        .shaking {
-            animation: shake 0.5s;
-            animation-iteration-count: infinite;
+
+        .insight-content {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            font-style: italic;
         }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #333;
+            border-radius: 3px;
+            margin-top: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            width: 0%;
+            transition: width 1s ease;
+        }
+
+        /* Footer */
+        .quote-author {
+            margin-top: 10px;
+            font-size: 0.8rem;
+            text-align: right;
+            color: #888;
+        }
+
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>Hành Trình "Cụ Chanh"</h1>
-        <p>Bắt đầu nhập môn từ: <strong>27/10/2025</strong></p>
-
-        <div class="lemon-avatar" id="avatarBox">
-            <img src="https://placehold.co/400x400/F4D03F/FFF?text=Fresh+Lemon" alt="Trạng thái hiện tại" id="statusImage">
+        <div style="margin-bottom: 10px;">
+            <span class="level-badge" id="levelTitle">Level 1: Chanh Tập Sự</span>
         </div>
 
-        <div class="counter-box">
-            <p>Bạn đã trụ được:</p>
-            <div class="timer" id="timer">
-                Đang tính toán...
+        <div class="main-avatar" id="avatarBox">
+            <img id="mainImage" src="https://placehold.co/400x400/8CB369/FFF?text=Fresh+Lime" alt="Lime">
+        </div>
+
+        <div class="baby-limes-zone" id="babyZone">
             </div>
+
+        <div>
+            <div class="unit-label">BẠN ĐÃ TRỤ ĐƯỢC</div>
+            <div class="count-display" id="totalDays">0</div>
+            <div class="unit-label">NGÀY</div>
         </div>
 
-        <div class="insight-card" id="insightText">
-            Đang check độ tươi...
+        <div class="progress-bar">
+            <div class="progress-fill" id="nextBabyProgress"></div>
         </div>
-    </div>
+        <div style="font-size: 0.7rem; color: #666; margin-top: 5px;">
+            Tiến độ đẻ chanh con tiếp theo
+        </div>
 
-    <div class="footer">
-        Hy vọng môi trường nhiều cơ hội, chứ đừng vắt em khô người 🙏
+        <div class="insight-box">
+            <span class="insight-day" id="insightDayLabel">DAY #0</span>
+            <div class="insight-content" id="insightText">
+                Loading vũ trụ quan...
+            </div>
+            <div class="quote-author">- Trích Nhật Ký Cụ Chanh -</div>
+        </div>
     </div>
 
     <script>
-        // Ngày bắt đầu: 27/10/2025
-        const startDate = new Date("2025-10-27T08:00:00").getTime();
+        // === CẤU HÌNH ===
+        const START_DATE = new Date("2025-10-27T00:00:00").getTime();
+        const BABY_THRESHOLD = 60; // Cứ 60 ngày đẻ 1 chanh con (hoặc chỉnh thành 30, 90 tùy độ khó)
 
-        function updateTimer() {
-            const now = new Date().getTime();
-            const distance = now - startDate;
+        // === KHO TÀNG INSIGHT (Mẫu đại diện, code sẽ tự random nếu hết) ===
+        // Bạn có thể thêm vào đây cho đủ 365 nếu muốn hardcode
+        const insightLibrary = [
+            "Khởi đầu nan, gian nan bắt đầu nản. Nhưng không sao, vỏ còn xanh, đời còn dài.",
+            "Hôm nay sếp cười với tôi. Không biết là cười khích lệ hay cười tiễn biệt.",
+            "Deadline là một khái niệm trừu tượng. Chỉ có tiếng tim đập là thật.",
+            "Phát hiện ra pantry công ty có loại trà ngon. Động lực đi làm tăng 1%.",
+            "Vắt kiệt sức? Không, tôi gọi đây là 'tối ưu hóa tài nguyên cơ thể'.",
+            "Mắt bắt đầu giật. Người ta bảo điềm lành, tôi nghĩ do thiếu magie hoặc thiếu ngủ.",
+            "Đã học được cách nói 'Em đang check' một cách đầy thuyết phục dù chưa mở máy.",
+            "Cảm giác 'Burn out' thực ra cũng ấm áp, giống như ngồi gần lò sưởi quá lâu.",
+            "Hôm nay tôi là một quả chanh. Chua ngoa với bug, nhưng ngọt ngào với lương.",
+            "Thấy đồng nghiệp về sớm. Lòng trĩu nặng nhưng tay vẫn gõ phím."
+        ];
 
-            if (distance < 0) {
-                document.getElementById("timer").innerHTML = "Chưa đến ngày đi làm!";
-                return;
-            }
-
-            // Tính toán thời gian
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            // Hiển thị
-            document.getElementById("timer").innerHTML = `
-                <span><b>${days}</b><small>Ngày</small></span>
-                <span><b>${hours}</b><small>Giờ</small></span>
-                <span><b>${minutes}</b><small>Phút</small></span>
-                <span><b>${seconds}</b><small>Giây</small></span>
-            `;
-
-            updateInsight(days);
+        function getLevelInfo(days) {
+            if (days < 30) return { title: "Level 1: Chanh Tập Sự", color: "#8CB369", imgText: "Fresh Lime" };
+            if (days < 90) return { title: "Level 2: Chanh Chiến Binh", color: "#F4E285", imgText: "Yellow Lemon" };
+            if (days < 180) return { title: "Level 3: Cụ Chanh", color: "#E6B800", imgText: "Elder Lemon" };
+            if (days < 365) return { title: "Level 4: Chanh Tổ Sư", color: "#BC4B51", imgText: "Master Lime" };
+            return { title: "Level 5: Chanh Hóa Thần", color: "#9932CC", imgText: "God Lime" };
         }
 
-        function updateInsight(days) {
-            const insightEl = document.getElementById("insightText");
-            const imgEl = document.getElementById("statusImage");
-            const avatarBox = document.getElementById("avatarBox");
+        function updateSystem() {
+            const now = new Date().getTime();
+            const distance = now - START_DATE;
+            
+            // Tính số ngày (làm tròn xuống)
+            const daysSurvived = Math.floor(distance / (1000 * 60 * 60 * 24));
+            // Tránh số âm nếu chưa đến ngày
+            const currentDay = daysSurvived > 0 ? daysSurvived : 0;
 
-            let message = "";
-            let imgText = "Lemon";
+            // 1. Cập nhật Số ngày
+            document.getElementById("totalDays").innerText = currentDay;
 
-            // Logic vui vẻ dựa trên số ngày
-            if (days < 7) {
-                message = "Vẫn còn tươi roi rói! Tràn trề vitamin C.";
-                imgText = "Happy+Lemon";
-                avatarBox.classList.remove("shaking");
-            } else if (days < 30) {
-                message = "Bắt đầu hơi chua chua rồi đấy. Cẩn thận!";
-                imgText = "Sweating+Lemon";
-                avatarBox.classList.remove("shaking");
-            } else if (days < 90) {
-                message = "Đã thành 'Cụ Chanh'. Nước cốt sắp cạn!";
-                imgText = "Tired+Lemon";
-                avatarBox.classList.add("shaking"); // Rung lắc vì stress
+            // 2. Cập nhật Level & Màu sắc
+            const level = getLevelInfo(currentDay);
+            document.getElementById("levelTitle").innerText = level.title;
+            document.documentElement.style.setProperty('--primary', level.color);
+            
+            // Cập nhật ảnh (Ở đây dùng placeholder, bạn thay link ảnh thật vào logic này)
+            // Ví dụ: if (level.title.includes("Level 1")) img.src = "link_anh_level_1.jpg"
+            const imgUrl = `https://placehold.co/400x400/${level.color.substring(1)}/FFF?text=${level.imgText}`;
+            // Chỉ cập nhật src nếu nó thay đổi để tránh nháy
+            if(document.getElementById("mainImage").getAttribute('src') !== imgUrl && currentDay > 0) {
+                 document.getElementById("mainImage").src = imgUrl;
+            }
+
+            // 3. Logic Đẻ Chanh Con
+            const babyCount = Math.floor(currentDay / BABY_THRESHOLD);
+            const babyZone = document.getElementById("babyZone");
+            
+            // Chỉ render lại nếu số lượng thay đổi
+            if (babyZone.children.length !== babyCount) {
+                babyZone.innerHTML = "";
+                for(let i = 0; i < babyCount; i++) {
+                    const baby = document.createElement("div");
+                    baby.className = "baby-lime";
+                    baby.innerHTML = "🍋<div class='baby-tooltip'>Baby #" + (i+1) + "</div>";
+                    // Delay animation cho vui mắt
+                    baby.style.animationDelay = (i * 0.2) + "s";
+                    babyZone.appendChild(baby);
+                }
+            }
+
+            // 4. Thanh tiến độ đẻ con tiếp theo
+            const daysIntoCycle = currentDay % BABY_THRESHOLD;
+            const percentage = (daysIntoCycle / BABY_THRESHOLD) * 100;
+            document.getElementById("nextBabyProgress").style.width = percentage + "%";
+
+            // 5. Logic Insight 365 (Dùng hàm băm đơn giản để chọn insight cố định cho mỗi ngày)
+            // Logic này giúp Day 5 luôn là câu A, Day 6 luôn là câu B, không bị random lung tung mỗi lần F5
+            document.getElementById("insightDayLabel").innerText = `NHẬT KÝ NGÀY THỨ ${currentDay}`;
+            
+            let dailyInsight = "";
+            if (currentDay < insightLibrary.length) {
+                dailyInsight = insightLibrary[currentDay];
             } else {
-                message = "SOS! Chỉ còn lại vỏ, cần nghỉ ngơi gấp!";
-                imgText = "Dried+Lemon";
-                avatarBox.classList.add("shaking");
+                // Nếu hết thư viện mẫu, tạo insight "Procedural"
+                const topics = ["sự kiên nhẫn", "họp hành", "fix bug", "OT", "cafe", "lương về"];
+                const actions = ["là vô nghĩa", "giúp tu tâm", "làm ta mạnh mẽ", "khiến ta hoài nghi nhân sinh"];
+                
+                // Chọn index dựa trên số ngày
+                const tIndex = currentDay % topics.length;
+                const aIndex = currentDay % actions.length;
+                
+                dailyInsight = `Ngày thứ ${currentDay}, tôi ngộ ra rằng ${topics[tIndex]} thực chất chỉ ${actions[aIndex]}.`;
             }
             
-            // Cập nhật text nếu nó thay đổi
-            if (insightEl.innerText !== message) {
-                insightEl.innerText = message;
-                // Ở đây bạn có thể thay link ảnh thật vào
-                imgEl.src = `https://placehold.co/400x400/F4D03F/FFF?text=${imgText}`; 
-            }
+            document.getElementById("insightText").innerText = dailyInsight;
         }
 
-        // Cập nhật mỗi giây
-        setInterval(updateTimer, 1000);
-        updateTimer(); // Chạy ngay lập tức
+        // Chạy ngay và lặp lại
+        updateSystem();
+        setInterval(updateSystem, 60000); // Cập nhật mỗi phút
+
     </script>
 </body>
 </html>
