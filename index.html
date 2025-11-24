@@ -309,32 +309,33 @@
 
         <form id="onboardingForm" style="width: 100%; max-width: 350px; margin: 0 auto;">
             <div style="margin-bottom: 20px;">
-                <label>MAP HIỆN TẠI (Tên công ty)</label>
-                <input type="text" id="companyInput" placeholder="VD: Sàn đấu La Mã..." required autocomplete="off">
+                <label>CÔNG TY HIỆN TẠI (Tên Map)</label>
+                <input type="text" id="companyInput" placeholder="VD: Đấu trường La Mã..." required autocomplete="off">
             </div>
 
             <div style="margin-bottom: 30px;">
-                <label>NGÀY ĐĂNG NHẬP (Start Date)</label>
+                <label>NGÀY ĐĂNG NHẬP (Ngày/Tháng/Năm)</label>
+                <!-- Lưu ý: Định dạng hiển thị trong ô này phụ thuộc vào cài đặt của thiết bị -->
                 <input type="date" id="dateInput" required>
             </div>
 
-            <button type="submit" class="btn-game btn-primary">START GAME</button>
+            <button type="submit" class="btn-game btn-primary">VÀO GAME</button>
         </form>
     </div>
 
     <!-- SCENE 2: MAIN HUD -->
     <div class="container" id="dashboard-screen">
         <header>
-            <div class="company-pill" id="displayCompany">Loading...</div>
+            <div class="company-pill" id="displayCompany">Đang tải...</div>
             <div style="font-weight: 700; font-size: 0.8rem; color: var(--text-secondary); margin-top: 8px;">
-                SERVER TIME: <span id="serverTime">...</span>
+                MÁY CHỦ: <span id="serverTime">...</span>
             </div>
         </header>
 
         <!-- PLAYER AVATAR -->
         <div class="avatar-container">
             <div class="avatar-frame">
-                <img id="avatarImg" class="avatar-img" src="https://placehold.co/400x400/eefec3/4D7C0F?text=NOOB" alt="Avatar">
+                <img id="avatarImg" class="avatar-img" src="https://placehold.co/400x400/eefec3/4D7C0F?text=GA+MO" alt="Avatar">
             </div>
             <div class="lvl-badge" id="levelTag">LV.1 TÂN THỦ</div>
         </div>
@@ -342,9 +343,9 @@
         <!-- MAIN STATS -->
         <div class="game-card hud-stats">
             <div class="big-number" id="dayCounter">0</div>
-            <div class="hud-label">NGÀY SINH TỒN (STREAK)</div>
+            <div class="hud-label">CHUỖI NGÀY SINH TỒN (STREAK)</div>
             <div style="font-size: 0.8rem; font-weight: 700; color: #94a3b8; margin-top: 5px;" id="startDateDisplay">
-                Start: --/--/----
+                Bắt đầu: --/--/----
             </div>
         </div>
 
@@ -364,7 +365,7 @@
 
             <!-- XP BAR -->
             <div style="margin-top: 15px; font-size: 0.75rem; font-weight: 800; color: var(--text-secondary); display: flex; justify-content: space-between;">
-                <span>NEXT DROP</span>
+                <span>TIẾN ĐỘ THU HOẠCH</span>
                 <span id="nextBabyText">...</span>
             </div>
             <div class="xp-bar-container">
@@ -375,12 +376,12 @@
         <!-- QUEST LOG (INSIGHT) -->
         <div class="game-card" style="background: #fffbeb; border-color: #fcd34d;">
             <div style="font-weight: 900; font-size: 0.8rem; color: #b45309; margin-bottom: 10px; text-transform: uppercase;">
-                📜 NHẬT KÝ HỆ THỐNG
+                📜 NHẬT KÝ CHIẾN TRƯỜNG
             </div>
             <div class="quest-log" id="dailyInsight">
-                Loading data...
+                Đang tải dữ liệu...
             </div>
-            <div class="quest-author">- Cụ Chanh NPC -</div>
+            <div class="quest-author">- NPC Cụ Chanh -</div>
         </div>
 
         <!-- FOOTER ACTIONS -->
@@ -396,11 +397,11 @@
 
         // VISUAL DATA
         const PHASES = [
-            { day: 0, title: "LV.1 TẤM CHIẾU MỚI", img: "https://placehold.co/400x400/84CC16/FFFFFF?text=Lv1+Noob" },
-            { day: 30, title: "LV.10 CHANH VẮT DỞ", img: "https://placehold.co/400x400/FACC15/000000?text=Lv10+Squeezed" },
-            { day: 180, title: "LV.50 CHANH LÌ LỢM", img: "https://placehold.co/400x400/EA580C/FFFFFF?text=Lv50+Tanker" },
-            { day: 365, title: "LV.99 CỤ CHANH TỔ", img: "https://placehold.co/400x400/4D7C0F/FFFFFF?text=Lv99+Boss" },
-            { day: 1000, title: "LV.MAX HÓA THẠCH", img: "https://placehold.co/400x400/57534E/FFFFFF?text=God+Mode" }
+            { day: 0, title: "LV.1 TẤM CHIẾU MỚI", img: "https://placehold.co/400x400/84CC16/FFFFFF?text=Lv1+Ga+Mo" },
+            { day: 30, title: "LV.10 CHANH VẮT DỞ", img: "https://placehold.co/400x400/FACC15/000000?text=Lv10+Vat+Do" },
+            { day: 180, title: "LV.50 CHANH LÌ LỢM", img: "https://placehold.co/400x400/EA580C/FFFFFF?text=Lv50+Li+Lom" },
+            { day: 365, title: "LV.99 CỤ CHANH TỔ", img: "https://placehold.co/400x400/4D7C0F/FFFFFF?text=Lv99+Trum" },
+            { day: 1000, title: "LV.MAX HÓA THẠCH", img: "https://placehold.co/400x400/57534E/FFFFFF?text=Bat+Tu" }
         ];
 
         // === CORE LOGIC ===
@@ -449,7 +450,7 @@
             // Display Start Date
             const dStr = String(d).padStart(2, '0');
             const mStr = String(m).padStart(2, '0');
-            document.getElementById('startDateDisplay').innerText = `Start: ${dStr}/${mStr}/${y}`;
+            document.getElementById('startDateDisplay').innerText = `Bắt đầu: ${dStr}/${mStr}/${y}`;
 
             // Calculate Days
             const nowMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -508,20 +509,20 @@
             let log = "";
             const today = new Date().getDay();
 
-            if (days === 0) log = `Tutorial: Chào mừng đến map ${company}. Nhiệm vụ chính: Đừng để thanh HP tinh thần về 0.`;
-            else if (today === 1) log = "Sự kiện tuần: 'Thứ Hai Đen Tối'. Debuff: Giảm 50% tốc độ làm việc.";
-            else if (today === 5) log = "Sự kiện sắp tới: 'Cuối Tuần'. Buff: Tăng 200% độ hưng phấn.";
+            if (days === 0) log = `Hướng dẫn: Chào mừng đến map ${company}. Nhiệm vụ chính: Đừng để thanh Máu (Tinh thần) về 0.`;
+            else if (today === 1) log = "Sự kiện tuần: 'Thứ Hai Đen Tối'. Hiệu ứng xấu: Giảm 50% tốc độ làm việc.";
+            else if (today === 5) log = "Sự kiện sắp tới: 'Cuối Tuần'. Hiệu ứng tốt: Tăng 200% độ hưng phấn.";
             else {
                 // Procedural generation
-                const monsters = ["Boss (Sếp)", "Mini-boss (KH)", "NPC Đồng Nghiệp", "Quái vật Deadline"];
-                const actions = ["vừa tung chiêu AOE", "đang hồi mana", "đang cast phép 'Họp Gấp'", "đã gây sát thương chí mạng"];
-                const effects = ["khiến bạn choáng 3s.", "gây mất 100 vàng (trà sữa).", "nhưng bạn đã né được.", "HP tinh thần giảm nhẹ."];
+                const monsters = ["Trùm Cuối (Sếp)", "Quái Tinh Anh (KH)", "NPC Đồng Nghiệp", "Quái vật Deadline"];
+                const actions = ["vừa tung chiêu diện rộng", "đang hồi năng lượng", "đang niệm chú 'Họp Gấp'", "đã gây sát thương chí mạng"];
+                const effects = ["khiến bạn choáng 3s.", "gây mất 100 vàng (trà sữa).", "nhưng bạn đã né được.", "Máu tinh thần giảm nhẹ."];
                 
                 const mIdx = days % monsters.length;
                 const aIdx = (days + 1) % actions.length;
                 const eIdx = (days + 2) % effects.length;
 
-                log = `Combat Log (Ngày ${days}): ${monsters[mIdx]} ${actions[aIdx]} ${effects[eIdx]}`;
+                log = `Nhật Ký (Ngày ${days}): ${monsters[mIdx]} ${actions[aIdx]} ${effects[eIdx]}`;
             }
 
             document.getElementById('dailyInsight').innerText = log;
