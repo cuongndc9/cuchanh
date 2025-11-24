@@ -64,7 +64,7 @@
             border: 3px solid var(--text-primary);
             border-radius: 16px;
             font-size: 1.1rem;
-            font-family: 'Nunito', sans-serif; /* Đảm bảo font chuẩn */
+            font-family: 'Nunito', sans-serif;
             font-weight: 900;
             cursor: pointer;
             text-transform: uppercase;
@@ -131,14 +131,17 @@
         input:focus { border-color: var(--lime-main); }
         label { font-weight: 800; margin-bottom: 8px; display: block; text-align: left; color: var(--text-secondary); text-transform: uppercase; font-size: 0.8rem; }
 
-        /* Custom Date Inputs */
+        /* Custom Date Inputs Styles */
         .date-inputs-group {
             display: flex;
             gap: 10px;
+            width: 100%;
         }
-        .date-input-small {
+        .date-inputs-group input {
             text-align: center;
         }
+        .day-input, .month-input { width: 30% !important; }
+        .year-input { width: 40% !important; }
 
         /* --- DASHBOARD --- */
         #dashboard-screen { display: none; width: 100%; animation: slideUp 0.5s ease; }
@@ -333,9 +336,9 @@
                 <label>NGÀY KÝ HỢP ĐỒNG (Ngày / Tháng / Năm)</label>
                 <!-- 3 Ô nhập ngày riêng biệt để đảm bảo chuẩn format -->
                 <div class="date-inputs-group">
-                    <input type="number" id="dayInput" class="date-input-small" placeholder="DD" min="1" max="31" required>
-                    <input type="number" id="monthInput" class="date-input-small" placeholder="MM" min="1" max="12" required>
-                    <input type="number" id="yearInput" class="date-input-small" placeholder="YYYY" min="1990" max="2100" required>
+                    <input type="number" id="dayInput" class="day-input" placeholder="DD" min="1" max="31" required>
+                    <input type="number" id="monthInput" class="month-input" placeholder="MM" min="1" max="12" required>
+                    <input type="number" id="yearInput" class="year-input" placeholder="YYYY" min="1990" max="2100" required>
                 </div>
             </div>
 
@@ -412,8 +415,15 @@
 
     <script>
         // === CONFIG ===
-        const STORAGE_KEY = 'lime_survival_game_v3'; // Key mới để tránh cache cũ lỗi
-        const BABY_THRESHOLD = 90; // 90 ngày drop 1 item
+        const CURRENT_STORAGE_KEY = 'lime_survival_game_v4'; // Key mới nhất
+        const LEGACY_KEYS = [
+            'lime_survival_game_v3',
+            'lime_survival_game_final',
+            'lime_survival_game_mode',
+            'lime_survival_v2_light'
+        ]; // Các key cũ để tìm và migrate
+        
+        const BABY_THRESHOLD = 90;
 
         // VISUAL DATA
         const PHASES = [
@@ -446,19 +456,35 @@
 
         function playClick() {
             clickSound.currentTime = 0;
-            clickSound.play().catch(e => {}); // Bỏ qua lỗi nếu chưa tương tác
+            clickSound.play().catch(e => {}); 
         }
 
         // === CORE LOGIC ===
         document.addEventListener('DOMContentLoaded', () => {
-            const savedData = localStorage.getItem(STORAGE_KEY);
-            if (savedData) {
-                // ĐÃ CÓ DATA -> VÀO THẲNG GAME (CACHING WORKING)
-                showDashboard(JSON.parse(savedData));
+            // 1. Kiểm tra key hiện tại
+            let data = localStorage.getItem(CURRENT_STORAGE_KEY);
+
+            // 2. Nếu không có, đi tìm "gia tài" cũ từ các phiên bản trước
+            if (!data) {
+                for (let key of LEGACY_KEYS) {
+                    const legacyData = localStorage.getItem(key);
+                    if (legacyData) {
+                        data = legacyData;
+                        // Migrate: Lưu ngay vào key mới
+                        localStorage.setItem(CURRENT_STORAGE_KEY, data);
+                        console.log("Đã khôi phục dữ liệu từ: " + key);
+                        break; 
+                    }
+                }
+            }
+
+            if (data) {
+                // LOAD GAME
+                showDashboard(JSON.parse(data));
                 document.getElementById('soundControl').classList.remove('hidden');
                 document.getElementById('soundControl').innerText = "🔇"; 
             } else {
-                // CHƯA CÓ DATA -> HIỆN FORM
+                // NEW GAME
                 showOnboarding();
             }
         });
@@ -477,15 +503,14 @@
             const m = document.getElementById('monthInput').value.padStart(2, '0');
             const y = document.getElementById('yearInput').value;
 
-            // Validate sơ bộ
             if (!company || !d || !m || !y) return;
-            if (d > 31 || m > 12) { alert("Ngày tháng không hợp lệ nha bạn ơi!"); return; }
+            if (d > 31 || m > 12) { alert("Ngày tháng ảo quá bạn ơi!"); return; }
 
-            // Lưu dạng chuẩn ISO để tính toán (yyyy-mm-dd)
+            // Lưu dạng chuẩn ISO (yyyy-mm-dd)
             const dateStr = `${y}-${m}-${d}`;
             
             const data = { company, startDate: dateStr };
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            localStorage.setItem(CURRENT_STORAGE_KEY, JSON.stringify(data));
             
             playIntroMusic();
 
@@ -503,7 +528,7 @@
             const now = new Date();
             document.getElementById('serverTime').innerText = now.toLocaleDateString('vi-VN');
 
-            // Parse ngày từ chuỗi ISO
+            // Parse ngày
             const [y, m, d] = data.startDate.split('-').map(Number);
             const start = new Date(y, m - 1, d); 
             
@@ -511,7 +536,6 @@
             const mStr = String(m).padStart(2, '0');
             document.getElementById('startDateDisplay').innerText = `Ngày ký hợp đồng: ${dStr}/${mStr}/${y}`;
 
-            // Tính số ngày
             const nowMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
             const diffTime = nowMidnight - start; 
             const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)); 
@@ -599,7 +623,9 @@
 
         function resignJob() {
             if (confirm("XÁC NHẬN: Bạn muốn hủy hợp đồng và chơi lại từ đầu?")) {
-                localStorage.removeItem(STORAGE_KEY);
+                localStorage.removeItem(CURRENT_STORAGE_KEY); // Xóa key hiện tại
+                // Xóa luôn mấy key cũ cho sạch nợ
+                LEGACY_KEYS.forEach(k => localStorage.removeItem(k));
                 location.reload();
             }
         }
