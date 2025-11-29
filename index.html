@@ -416,6 +416,8 @@
         // === CONFIG ===
         // SỬ DỤNG MỘT KEY DUY NHẤT VÀ ỔN ĐỊNH
         const MAIN_KEY = 'LIME_SURVIVAL_MAIN_SAVE';
+        // KEY LƯU CACHE ONBOARDING (company, day, month, year)
+        const ONBOARDING_CACHE_KEY = 'LIME_SURVIVAL_ONBOARDING_CACHE';
         // DANH SÁCH CÁC KEY CŨ ĐỂ TỰ ĐỘNG CHUYỂN DỮ LIỆU SANG KEY MỚI
         const LEGACY_KEYS = [
             'lime_survival_game_v4',
@@ -426,6 +428,119 @@
         ];
         
         const BABY_THRESHOLD = 90;
+
+        // === DATE VALIDATION ===
+        function isLeapYear(year) {
+            return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
+        }
+
+        function getDaysInMonth(month, year) {
+            const daysInMonths = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+            if (month === 2 && isLeapYear(year)) {
+                return 29;
+            }
+            return daysInMonths[month - 1];
+        }
+
+        function isValidDate(day, month, year) {
+            // Check if all values are valid numbers
+            if (isNaN(day) || isNaN(month) || isNaN(year)) {
+                return { valid: false, message: "Ngày tháng không hợp lệ, kiểm tra lại nhé!" };
+            }
+
+            // Check year range
+            if (year < 1990 || year > 2100) {
+                return { valid: false, message: "Năm phải nằm trong khoảng 1990-2100!" };
+            }
+
+            // Check month range
+            if (month < 1 || month > 12) {
+                return { valid: false, message: "Tháng phải từ 1 đến 12!" };
+            }
+
+            // Check day range (basic)
+            if (day < 1 || day > 31) {
+                return { valid: false, message: "Ngày phải từ 1 đến 31!" };
+            }
+
+            // Check day against actual days in month
+            const maxDays = getDaysInMonth(month, year);
+            if (day > maxDays) {
+                return { valid: false, message: `Ngày không được lớn hơn ${maxDays} cho tháng ${month}!` };
+            }
+
+            return { valid: true };
+        }
+
+        function validateDateInputs() {
+            const dayStr = document.getElementById('dayInput').value.trim();
+            const monthStr = document.getElementById('monthInput').value.trim();
+            const yearStr = document.getElementById('yearInput').value.trim();
+            const company = document.getElementById('companyInput').value.trim();
+
+            // Check company
+            if (!company) {
+                return { valid: false, message: "Vui lòng nhập tên công ty!" };
+            }
+
+            // Check all fields are present
+            if (!dayStr || !monthStr || !yearStr) {
+                return { valid: false, message: "Vui lòng nhập đầy đủ ngày, tháng, năm!" };
+            }
+
+            // Check all fields are numeric
+            if (!/^\d+$/.test(dayStr) || !/^\d+$/.test(monthStr) || !/^\d+$/.test(yearStr)) {
+                return { valid: false, message: "Ngày, tháng, năm phải là số!" };
+            }
+
+            const day = parseInt(dayStr, 10);
+            const month = parseInt(monthStr, 10);
+            const year = parseInt(yearStr, 10);
+
+            // Validate the date
+            const dateValidation = isValidDate(day, month, year);
+            if (!dateValidation.valid) {
+                return dateValidation;
+            }
+
+            return { valid: true, day, month, year, company };
+        }
+
+        function getOnboardingCache() {
+            const cacheString = localStorage.getItem(ONBOARDING_CACHE_KEY);
+            if (!cacheString) return null;
+            try {
+                return JSON.parse(cacheString);
+            } catch (e) {
+                console.error("Cache onboarding bị lỗi.");
+                localStorage.removeItem(ONBOARDING_CACHE_KEY);
+                return null;
+            }
+        }
+
+        function canAutoSkipFromCache(cache) {
+            if (!cache || !cache.company || !cache.day || !cache.month || !cache.year) {
+                return false;
+            }
+            const dateValidation = isValidDate(cache.day, cache.month, cache.year);
+            return dateValidation.valid;
+        }
+
+        function autofillFromCache(cache) {
+            if (!cache) return;
+            if (cache.company) {
+                document.getElementById('companyInput').value = cache.company;
+            }
+            if (cache.day) {
+                document.getElementById('dayInput').value = cache.day;
+            }
+            if (cache.month) {
+                document.getElementById('monthInput').value = cache.month;
+            }
+            if (cache.year) {
+                document.getElementById('yearInput').value = cache.year;
+            }
+        }
 
         // VISUAL DATA
         const PHASES = [
@@ -495,6 +610,21 @@
                     showOnboarding();
                 }
             } else {
+                // Kiểm tra cache onboarding để auto-skip hoặc auto-fill
+                const cache = getOnboardingCache();
+                if (cache && canAutoSkipFromCache(cache)) {
+                    // Can auto-skip: build data from cache and go to dashboard
+                    const d = String(cache.day).padStart(2, '0');
+                    const m = String(cache.month).padStart(2, '0');
+                    const y = cache.year;
+                    const dateStr = `${y}-${m}-${d}`;
+                    const newData = { company: cache.company, startDate: dateStr };
+                    localStorage.setItem(MAIN_KEY, JSON.stringify(newData));
+                    showDashboard(newData);
+                    document.getElementById('soundControl').classList.remove('hidden');
+                    document.getElementById('soundControl').innerText = "🔇";
+                    return;
+                }
                 // NEW GAME
                 showOnboarding();
             }
@@ -503,24 +633,36 @@
         function showOnboarding() {
             document.getElementById('onboarding-screen').classList.remove('hidden');
             document.getElementById('dashboard-screen').style.display = 'none';
+            
+            // Auto-fill from cache if available
+            const cache = getOnboardingCache();
+            autofillFromCache(cache);
         }
 
         document.getElementById('onboardingForm').addEventListener('submit', (e) => {
             e.preventDefault();
-            const company = document.getElementById('companyInput').value;
             
-            const d = document.getElementById('dayInput').value.padStart(2, '0');
-            const m = document.getElementById('monthInput').value.padStart(2, '0');
-            const y = document.getElementById('yearInput').value;
+            // Strict validation
+            const validation = validateDateInputs();
+            if (!validation.valid) {
+                alert(validation.message);
+                return;
+            }
 
-            if (!company || !d || !m || !y) return;
-            if (d > 31 || m > 12) { alert("Ngày tháng ảo quá bạn ơi!"); return; }
+            const { company, day, month, year } = validation;
+            const d = String(day).padStart(2, '0');
+            const m = String(month).padStart(2, '0');
+            const y = year;
 
             const dateStr = `${y}-${m}-${d}`;
             const data = { company, startDate: dateStr };
             
             // LƯU DỮ LIỆU
             localStorage.setItem(MAIN_KEY, JSON.stringify(data));
+            
+            // Lưu cache onboarding (chỉ khi date hợp lệ)
+            const cacheData = { company, day, month, year };
+            localStorage.setItem(ONBOARDING_CACHE_KEY, JSON.stringify(cacheData));
             
             playIntroMusic();
 
@@ -532,6 +674,7 @@
         });
 
         function showDashboard(data) {
+            document.getElementById('onboarding-screen').classList.add('hidden');
             document.getElementById('dashboard-screen').style.display = 'flex';
             document.getElementById('displayCompany').innerText = "MAP: " + data.company;
             
@@ -633,6 +776,7 @@
         function resignJob() {
             if (confirm("XÁC NHẬN: Bạn muốn hủy hợp đồng và chơi lại từ đầu?")) {
                 localStorage.removeItem(MAIN_KEY); // Xóa key chính
+                localStorage.removeItem(ONBOARDING_CACHE_KEY); // Xóa cache onboarding
                 LEGACY_KEYS.forEach(k => localStorage.removeItem(k)); // Xóa key cũ cho sạch
                 location.reload();
             }
