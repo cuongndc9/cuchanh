@@ -418,6 +418,8 @@
         const MAIN_KEY = 'LIME_SURVIVAL_MAIN_SAVE';
         // KEY LƯU CACHE ONBOARDING (company, day, month, year)
         const ONBOARDING_CACHE_KEY = 'LIME_SURVIVAL_ONBOARDING_CACHE';
+        // KEY LƯU CÀI ĐẶT ÂM THANH
+        const SOUND_SETTING_KEY = 'LIME_SURVIVAL_SOUND_ENABLED';
         // DANH SÁCH CÁC KEY CŨ ĐỂ TỰ ĐỘNG CHUYỂN DỮ LIỆU SANG KEY MỚI
         const LEGACY_KEYS = [
             'lime_survival_game_v4',
@@ -558,17 +560,61 @@
 
         function toggleSound() {
             if (bgMusic.paused) {
-                bgMusic.play();
-                document.getElementById('soundControl').innerText = "🔊";
+                bgMusic.play().then(() => {
+                    document.getElementById('soundControl').innerText = "🔊";
+                    localStorage.setItem(SOUND_SETTING_KEY, 'true');
+                }).catch(error => {
+                    console.log("Không thể phát nhạc:", error);
+                });
             } else {
                 bgMusic.pause();
                 document.getElementById('soundControl').innerText = "🔇";
+                localStorage.setItem(SOUND_SETTING_KEY, 'false');
+            }
+        }
+
+        function applySavedSoundSetting(isFirstVisit) {
+            const soundControl = document.getElementById('soundControl');
+            // Always show the sound control button
+            soundControl.classList.remove('hidden');
+            
+            const savedSetting = localStorage.getItem(SOUND_SETTING_KEY);
+            
+            if (savedSetting === null) {
+                // No saved value exists
+                if (isFirstVisit) {
+                    // First visit: attempt to auto-play music (default ON)
+                    bgMusic.play().then(() => {
+                        soundControl.innerText = "🔊";
+                        localStorage.setItem(SOUND_SETTING_KEY, 'true');
+                    }).catch(error => {
+                        // Auto-play blocked by browser, keep icon at muted
+                        console.log("Auto-play bị chặn:", error);
+                        soundControl.innerText = "🔇";
+                    });
+                } else {
+                    // Not first visit but no saved setting: don't auto-play
+                    soundControl.innerText = "🔇";
+                }
+            } else if (savedSetting === 'true') {
+                // User previously enabled sound
+                bgMusic.play().then(() => {
+                    soundControl.innerText = "🔊";
+                }).catch(error => {
+                    console.log("Auto-play bị chặn:", error);
+                    // Keep sane icon state even if auto-play is blocked
+                    soundControl.innerText = "🔊";
+                });
+            } else {
+                // User previously disabled sound (savedSetting === 'false')
+                bgMusic.pause();
+                soundControl.innerText = "🔇";
             }
         }
 
         function playIntroMusic() {
-            bgMusic.play().catch(error => { console.log("Cần tương tác để phát nhạc"); });
-            document.getElementById('soundControl').classList.remove('hidden');
+            // Delegate to applySavedSoundSetting with isFirstVisit = true
+            applySavedSoundSetting(true);
         }
 
         function playClick() {
@@ -601,8 +647,8 @@
                     data = JSON.parse(dataString);
                     // LOAD GAME NGAY
                     showDashboard(data);
-                    document.getElementById('soundControl').classList.remove('hidden');
-                    document.getElementById('soundControl').innerText = "🔇"; 
+                    // This is not first visit - load saved sound setting
+                    applySavedSoundSetting(false);
                 } catch (e) {
                     // Nếu dữ liệu lỗi, bắt buộc nhập lại
                     console.error("Save file bị lỗi, reset game.");
@@ -621,8 +667,8 @@
                     const newData = { company: cache.company, startDate: dateStr };
                     localStorage.setItem(MAIN_KEY, JSON.stringify(newData));
                     showDashboard(newData);
-                    document.getElementById('soundControl').classList.remove('hidden');
-                    document.getElementById('soundControl').innerText = "🔇";
+                    // This acts as first visit from cache - apply sound with first visit behavior
+                    applySavedSoundSetting(true);
                     return;
                 }
                 // NEW GAME
@@ -777,6 +823,7 @@
             if (confirm("XÁC NHẬN: Bạn muốn hủy hợp đồng và chơi lại từ đầu?")) {
                 localStorage.removeItem(MAIN_KEY); // Xóa key chính
                 localStorage.removeItem(ONBOARDING_CACHE_KEY); // Xóa cache onboarding
+                localStorage.removeItem(SOUND_SETTING_KEY); // Xóa cài đặt âm thanh
                 LEGACY_KEYS.forEach(k => localStorage.removeItem(k)); // Xóa key cũ cho sạch
                 location.reload();
             }
