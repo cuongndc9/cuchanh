@@ -506,6 +506,42 @@
             return { valid: true, day, month, year, company };
         }
 
+        function getOnboardingCache() {
+            const cacheString = localStorage.getItem(ONBOARDING_CACHE_KEY);
+            if (!cacheString) return null;
+            try {
+                return JSON.parse(cacheString);
+            } catch (e) {
+                console.error("Cache onboarding bị lỗi.");
+                localStorage.removeItem(ONBOARDING_CACHE_KEY);
+                return null;
+            }
+        }
+
+        function canAutoSkipFromCache(cache) {
+            if (!cache || !cache.company || !cache.day || !cache.month || !cache.year) {
+                return false;
+            }
+            const dateValidation = isValidDate(cache.day, cache.month, cache.year);
+            return dateValidation.valid;
+        }
+
+        function autofillFromCache(cache) {
+            if (!cache) return;
+            if (cache.company) {
+                document.getElementById('companyInput').value = cache.company;
+            }
+            if (cache.day) {
+                document.getElementById('dayInput').value = cache.day;
+            }
+            if (cache.month) {
+                document.getElementById('monthInput').value = cache.month;
+            }
+            if (cache.year) {
+                document.getElementById('yearInput').value = cache.year;
+            }
+        }
+
         // VISUAL DATA
         const PHASES = [
             { day: 0, title: "LV.1 CHANH TÂN BINH", img: "https://placehold.co/400x400/84CC16/FFFFFF?text=Lv1+Noob" },
@@ -575,29 +611,19 @@
                 }
             } else {
                 // Kiểm tra cache onboarding để auto-skip hoặc auto-fill
-                const cacheString = localStorage.getItem(ONBOARDING_CACHE_KEY);
-                if (cacheString) {
-                    try {
-                        const cache = JSON.parse(cacheString);
-                        // Validate cached date before using
-                        const dateValidation = isValidDate(cache.day, cache.month, cache.year);
-                        if (cache.company && cache.day && cache.month && cache.year && dateValidation.valid) {
-                            // Can auto-skip: build data from cache and go to dashboard
-                            const d = String(cache.day).padStart(2, '0');
-                            const m = String(cache.month).padStart(2, '0');
-                            const y = cache.year;
-                            const dateStr = `${y}-${m}-${d}`;
-                            const newData = { company: cache.company, startDate: dateStr };
-                            localStorage.setItem(MAIN_KEY, JSON.stringify(newData));
-                            showDashboard(newData);
-                            document.getElementById('soundControl').classList.remove('hidden');
-                            document.getElementById('soundControl').innerText = "🔇";
-                            return;
-                        }
-                    } catch (e) {
-                        console.error("Cache onboarding bị lỗi.");
-                        localStorage.removeItem(ONBOARDING_CACHE_KEY);
-                    }
+                const cache = getOnboardingCache();
+                if (cache && canAutoSkipFromCache(cache)) {
+                    // Can auto-skip: build data from cache and go to dashboard
+                    const d = String(cache.day).padStart(2, '0');
+                    const m = String(cache.month).padStart(2, '0');
+                    const y = cache.year;
+                    const dateStr = `${y}-${m}-${d}`;
+                    const newData = { company: cache.company, startDate: dateStr };
+                    localStorage.setItem(MAIN_KEY, JSON.stringify(newData));
+                    showDashboard(newData);
+                    document.getElementById('soundControl').classList.remove('hidden');
+                    document.getElementById('soundControl').innerText = "🔇";
+                    return;
                 }
                 // NEW GAME
                 showOnboarding();
@@ -609,26 +635,8 @@
             document.getElementById('dashboard-screen').style.display = 'none';
             
             // Auto-fill from cache if available
-            const cacheString = localStorage.getItem(ONBOARDING_CACHE_KEY);
-            if (cacheString) {
-                try {
-                    const cache = JSON.parse(cacheString);
-                    if (cache.company) {
-                        document.getElementById('companyInput').value = cache.company;
-                    }
-                    if (cache.day) {
-                        document.getElementById('dayInput').value = cache.day;
-                    }
-                    if (cache.month) {
-                        document.getElementById('monthInput').value = cache.month;
-                    }
-                    if (cache.year) {
-                        document.getElementById('yearInput').value = cache.year;
-                    }
-                } catch (e) {
-                    console.error("Không thể đọc cache onboarding.");
-                }
-            }
+            const cache = getOnboardingCache();
+            autofillFromCache(cache);
         }
 
         document.getElementById('onboardingForm').addEventListener('submit', (e) => {
