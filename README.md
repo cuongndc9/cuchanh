@@ -1,19 +1,28 @@
-🍋 Nhật Ký Cụ Chanh - Office Survival Game
+# 🍋 Nhật Ký Cụ Chanh
 
-Một chiếc web-game vui vẻ (và hơi "chua") giúp dân văn phòng đếm ngày sinh tồn tại công ty theo phong cách RPG.
+**Chào mừng bạn đến với Game sinh tồn văn phòng vui nhộn!**
 
-🎮 Tính Năng Chính
+Bạn đang làm việc tại công ty? Hãy để Cụ Chanh đồng hành cùng bạn trên hành trình "bán mình" cho tư bản một cách vui vẻ và đầy màu sắc RPG!
 
-Đếm Ngày Sinh Tồn (Streak): Tính chính xác số ngày bạn đã "bán mình" cho tư bản.
+## 🚀 Cách Chơi
 
-Hệ Thống Cấp Độ (Level): Tiến hóa từ Lv.1 Chanh Tân Binh đến Lv.Max Cụ Chanh Hóa Thạch.
+1. **Mở game** - Truy cập trang web và bắt đầu ngay
+2. **Nhập thông tin** - Điền tên công ty và ngày bắt đầu làm việc của bạn
+3. **Bắt đầu hành trình** - Xem số ngày sinh tồn của bạn tăng lên mỗi ngày!
 
-Kho Đồ (Inventory): Tự động "thu hoạch" Chanh Con (Thành tựu) mỗi 90 ngày trụ hạng.
+## ✨ Trải Nghiệm Trong Game
 
-Nhật Ký Chiến Trường: Hệ thống tự tạo các câu log "khịa" hài hước mỗi ngày (Thứ 2 đen tối, Cuối tuần hạnh phúc...).
+- **Số ngày trụ hạng** - Xem bạn đã "chiến đấu" được bao lâu rồi
+- **Lên cấp tự động** - Từ "Chanh Tân Binh" đến "Cụ Chanh Hóa Thạch"
+- **Thu thập Chanh Con** - Nhận thành tựu mỗi 90 ngày
+- **Đọc Nhật Ký Chiến Trường** - Những dòng ghi chép hài hước mỗi ngày
+- **Nghe nhạc 8-bit** - Thư giãn với âm thanh retro
 
-Lưu Game Tự Động: Dữ liệu được lưu vào trình duyệt, F5 không mất file save.
+## 💾 Lưu Ý
 
-Âm Nhạc: Nhạc nền 8-bit và hiệu ứng âm thanh retro.
+- Game tự động lưu vào trình duyệt - refresh trang không mất dữ liệu
+- Muốn chơi lại từ đầu? Ấn nút "Hủy Hợp Đồng" ở cuối trang
 
-Code for fun. Stay Sour, Stay Strong! 🍋
+---
+
+**Stay Sour, Stay Strong! 🍋**
