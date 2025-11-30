@@ -4,6 +4,8 @@
 
 Bạn đang làm việc tại công ty? Hãy để Cụ Chanh đồng hành cùng bạn trên hành trình "bán mình" cho tư bản một cách vui vẻ và đầy màu sắc RPG!
 
+![Game Screenshot](https://github.com/user-attachments/assets/ddb2b760-7960-41e8-8470-71b655b52f16)
+
 ## 🚀 Cách Chơi
 
 1. **Mở game** - Truy cập trang web và bắt đầu ngay

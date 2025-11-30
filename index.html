@@ -544,13 +544,57 @@
             }
         }
 
-        // VISUAL DATA
+        // VISUAL DATA - Levels từ 1 đến 100+ cho 10 năm đi làm (3650+ ngày)
         const PHASES = [
-            { day: 0, title: "LV.1 CHANH TÂN BINH", img: "https://placehold.co/400x400/84CC16/FFFFFF?text=Lv1+Noob" },
-            { day: 30, title: "LV.10 CHANH VẮT DỞ", img: "https://placehold.co/400x400/FACC15/000000?text=Lv10+Squeezed" },
-            { day: 180, title: "LV.50 CHANH LÌ LỢM", img: "https://placehold.co/400x400/EA580C/FFFFFF?text=Lv50+Tank" },
-            { day: 365, title: "LV.99 CỤ CHANH TỔ", img: "https://placehold.co/400x400/4D7C0F/FFFFFF?text=Lv99+Boss" },
-            { day: 1000, title: "LV.MAX HÓA THẠCH", img: "https://placehold.co/400x400/57534E/FFFFFF?text=Immortal" }
+            { day: 0, title: "LV.1 CHANH TÂN BINH", img: "https://placehold.co/400x400/84CC16/FFFFFF?text=Lv1" },
+            { day: 7, title: "LV.2 CHANH HỌC VIỆC", img: "https://placehold.co/400x400/84CC16/FFFFFF?text=Lv2" },
+            { day: 14, title: "LV.3 CHANH NGÂY THƠ", img: "https://placehold.co/400x400/84CC16/FFFFFF?text=Lv3" },
+            { day: 21, title: "LV.4 CHANH CHỊU ĐỰNG", img: "https://placehold.co/400x400/84CC16/FFFFFF?text=Lv4" },
+            { day: 30, title: "LV.5 CHANH VẮT DỞ", img: "https://placehold.co/400x400/FACC15/000000?text=Lv5" },
+            { day: 45, title: "LV.6 CHANH TẬP SỰ", img: "https://placehold.co/400x400/FACC15/000000?text=Lv6" },
+            { day: 60, title: "LV.7 CHANH THỬ THÁCH", img: "https://placehold.co/400x400/FACC15/000000?text=Lv7" },
+            { day: 75, title: "LV.8 CHANH KIÊN NHẪN", img: "https://placehold.co/400x400/FACC15/000000?text=Lv8" },
+            { day: 90, title: "LV.9 CHANH ĐÃ QUA THỬ VIỆC", img: "https://placehold.co/400x400/FACC15/000000?text=Lv9" },
+            { day: 120, title: "LV.10 CHANH CHÍNH THỨC", img: "https://placehold.co/400x400/F97316/FFFFFF?text=Lv10" },
+            { day: 150, title: "LV.12 CHANH BIẾT CHUYỆN", img: "https://placehold.co/400x400/F97316/FFFFFF?text=Lv12" },
+            { day: 180, title: "LV.15 CHANH NỬA NĂM", img: "https://placehold.co/400x400/EA580C/FFFFFF?text=Lv15" },
+            { day: 210, title: "LV.18 CHANH CÓ KINH NGHIỆM", img: "https://placehold.co/400x400/EA580C/FFFFFF?text=Lv18" },
+            { day: 240, title: "LV.20 CHANH SENIOR JR", img: "https://placehold.co/400x400/EA580C/FFFFFF?text=Lv20" },
+            { day: 270, title: "LV.22 CHANH THẠO VIỆC", img: "https://placehold.co/400x400/EA580C/FFFFFF?text=Lv22" },
+            { day: 300, title: "LV.25 CHANH GẦN 1 NĂM", img: "https://placehold.co/400x400/DC2626/FFFFFF?text=Lv25" },
+            { day: 330, title: "LV.28 CHANH SẮP TRÒN NĂM", img: "https://placehold.co/400x400/DC2626/FFFFFF?text=Lv28" },
+            { day: 365, title: "LV.30 CHANH 1 NĂM - LÃO LÀNG", img: "https://placehold.co/400x400/4D7C0F/FFFFFF?text=Lv30" },
+            { day: 456, title: "LV.35 CHANH ĐÃ CHAI SẠN", img: "https://placehold.co/400x400/4D7C0F/FFFFFF?text=Lv35" },
+            { day: 548, title: "LV.40 CHANH 1.5 NĂM", img: "https://placehold.co/400x400/4D7C0F/FFFFFF?text=Lv40" },
+            { day: 639, title: "LV.45 CHANH TRƯỞNG THÀNH", img: "https://placehold.co/400x400/4D7C0F/FFFFFF?text=Lv45" },
+            { day: 730, title: "LV.50 CHANH 2 NĂM - KỲ CỰU", img: "https://placehold.co/400x400/7C3AED/FFFFFF?text=Lv50" },
+            { day: 821, title: "LV.52 CHANH KHÔNG CÒN SỢ GÌ", img: "https://placehold.co/400x400/7C3AED/FFFFFF?text=Lv52" },
+            { day: 912, title: "LV.55 CHANH ĐÃ THẤY HẾT", img: "https://placehold.co/400x400/7C3AED/FFFFFF?text=Lv55" },
+            { day: 1000, title: "LV.58 CHANH NGÀN NGÀY", img: "https://placehold.co/400x400/7C3AED/FFFFFF?text=Lv58" },
+            { day: 1095, title: "LV.60 CHANH 3 NĂM - HUYỀN THOẠI", img: "https://placehold.co/400x400/6366F1/FFFFFF?text=Lv60" },
+            { day: 1186, title: "LV.62 CHANH KHÔNG THỂ BỊ SA THẢI", img: "https://placehold.co/400x400/6366F1/FFFFFF?text=Lv62" },
+            { day: 1277, title: "LV.65 CHANH ĐÃ HÓA ĐÁ", img: "https://placehold.co/400x400/6366F1/FFFFFF?text=Lv65" },
+            { day: 1368, title: "LV.68 CHANH BIẾT TUỐT", img: "https://placehold.co/400x400/6366F1/FFFFFF?text=Lv68" },
+            { day: 1460, title: "LV.70 CHANH 4 NĂM - ĐẠI LÃO", img: "https://placehold.co/400x400/EC4899/FFFFFF?text=Lv70" },
+            { day: 1551, title: "LV.72 CHANH ĐÃ QUÁ MỆT MỎI", img: "https://placehold.co/400x400/EC4899/FFFFFF?text=Lv72" },
+            { day: 1642, title: "LV.75 CHANH CÓ THỂ DẠY SẾP", img: "https://placehold.co/400x400/EC4899/FFFFFF?text=Lv75" },
+            { day: 1733, title: "LV.78 CHANH HUYỀN THOẠI SỐNG", img: "https://placehold.co/400x400/EC4899/FFFFFF?text=Lv78" },
+            { day: 1825, title: "LV.80 CHANH 5 NĂM - CỔ THỤ", img: "https://placehold.co/400x400/F43F5E/FFFFFF?text=Lv80" },
+            { day: 1916, title: "LV.82 CHANH ĐÃ THÀNH TƯỢNG ĐÀI", img: "https://placehold.co/400x400/F43F5E/FFFFFF?text=Lv82" },
+            { day: 2007, title: "LV.85 CHANH KHÔNG CÒN CẢM XÚC", img: "https://placehold.co/400x400/F43F5E/FFFFFF?text=Lv85" },
+            { day: 2098, title: "LV.88 CHANH ĐÃ GIÁC NGỘ", img: "https://placehold.co/400x400/F43F5E/FFFFFF?text=Lv88" },
+            { day: 2190, title: "LV.90 CHANH 6 NĂM - THẦN THÁNH", img: "https://placehold.co/400x400/BE185D/FFFFFF?text=Lv90" },
+            { day: 2281, title: "LV.92 CHANH ĐÃ VÔ NGẠI", img: "https://placehold.co/400x400/BE185D/FFFFFF?text=Lv92" },
+            { day: 2372, title: "LV.94 CHANH CÓ THỂ ĐIỀU KHIỂN THỜI GIAN", img: "https://placehold.co/400x400/BE185D/FFFFFF?text=Lv94" },
+            { day: 2463, title: "LV.96 CHANH ĐÃ VƯỢT GIỚI HẠN", img: "https://placehold.co/400x400/BE185D/FFFFFF?text=Lv96" },
+            { day: 2555, title: "LV.98 CHANH 7 NĂM - CỔ ĐẠI", img: "https://placehold.co/400x400/78350F/FFFFFF?text=Lv98" },
+            { day: 2646, title: "LV.99 CHANH ĐÃ LÊN THÀNH TIÊN", img: "https://placehold.co/400x400/78350F/FFFFFF?text=Lv99" },
+            { day: 2737, title: "LV.100 CHANH TỐI THƯỢNG", img: "https://placehold.co/400x400/78350F/FFFFFF?text=Lv100" },
+            { day: 2920, title: "LV.105 CHANH 8 NĂM - SIÊU VIỆT", img: "https://placehold.co/400x400/57534E/FFFFFF?text=Lv105" },
+            { day: 3102, title: "LV.110 CHANH ĐÃ VƯỢT TRÊN TẤT CẢ", img: "https://placehold.co/400x400/57534E/FFFFFF?text=Lv110" },
+            { day: 3285, title: "LV.115 CHANH 9 NĂM - VÔ ĐỊCH", img: "https://placehold.co/400x400/57534E/FFFFFF?text=Lv115" },
+            { day: 3467, title: "LV.118 CHANH SẮP HOÀN TẤT 10 NĂM", img: "https://placehold.co/400x400/57534E/FFFFFF?text=Lv118" },
+            { day: 3650, title: "LV.120 CHANH 10 NĂM - HÓA THẠCH VĨNH CỬU", img: "https://placehold.co/400x400/1C1917/FFFFFF?text=Lv120+MAX" }
         ];
 
         // === SOUND CONTROLLER ===
@@ -602,8 +646,8 @@
                     soundControl.innerText = "🔊";
                 }).catch(error => {
                     console.log("Auto-play bị chặn:", error);
-                    // Keep sane icon state even if auto-play is blocked
-                    soundControl.innerText = "🔊";
+                    // If auto-play is blocked, show muted icon to reflect actual state
+                    soundControl.innerText = "🔇";
                 });
             } else {
                 // User previously disabled sound (savedSetting === 'false')
@@ -786,14 +830,105 @@
             let log = "";
             const today = new Date().getDay();
 
-            if (days === 0) log = `TUTORIAL: Chào mừng đến ngục tối ${company}. Nhiệm vụ duy nhất: Đừng để thanh HP (Tinh Thần) tụt về 0.`;
-            else if (today === 1) log = "SỰ KIỆN TUẦN: 'Thứ Hai Đen Tối'. Debuff: Giảm 50% Mana, tăng 200% độ buồn ngủ.";
-            else if (today === 5) log = "SỰ KIỆN SẮP TỚI: 'Cuối Tuần Hạnh Phúc'. Buff: Hồi phục 100% HP nếu không bị Sếp gọi.";
-            else if (days > 365 && days < 370) log = "THÀNH TỰU: 'Kẻ Sống Sót 1 Năm'. Bạn nhận được danh hiệu 'Lão Làng' và một cái lưng đau.";
+            // Các câu nói theo level/milestone - mặn và vui vẻ
+            const milestoneQuotes = {
+                0: `TUTORIAL: Chào mừng đến ngục tối ${company}. Nhiệm vụ duy nhất: Đừng để thanh HP (Tinh Thần) tụt về 0. Chúc may mắn, bạn sẽ cần nó!`,
+                7: "MILESTONE: 1 tuần! Bạn đã sống sót tuần đầu. Hy vọng vẫn còn nguyên, tinh thần vẫn cao. Hãy chuẩn bị để nó tan biến dần...",
+                14: "MILESTONE: 2 tuần! Bạn bắt đầu nhận ra mọi thứ không đẹp như trong buổi phỏng vấn. Welcome to reality!",
+                21: "MILESTONE: 3 tuần! Skill 'Chịu Đựng' đã được unlock. Bạn có thể ngồi họp 2 tiếng mà không ngủ gục.",
+                30: "MILESTONE: 1 tháng! Qua thử việc (có thể). Giờ bạn chính thức là một phần của hệ thống. Không lối thoát!",
+                45: "INSIGHT: 45 ngày - Bạn đã biết ai hay buôn chuyện, ai hay đi muộn, ai hay ăn trộm đồ ăn trong tủ lạnh.",
+                60: "MILESTONE: 2 tháng! Bạn nhận ra deadline là thứ được sinh ra để bị missed. Đừng lo, ai cũng thế.",
+                75: "INSIGHT: 75 ngày - Skill 'Fake Busy' đã đạt rank B. Bạn có thể trông bận rộn mà thực ra đang xem YouTube.",
+                90: "MILESTONE: 3 tháng! Chúc mừng đã qua thử việc chính thức! Item 'Chanh Con' đầu tiên đã rớt. Giữ lấy nó!",
+                120: "INSIGHT: 4 tháng - Bạn bắt đầu có thể phân biệt email quan trọng và email 'reply all' vô nghĩa.",
+                150: "MILESTONE: 5 tháng! Skill 'Giả Vờ Quan Tâm' trong họp đã đạt trình độ Expert.",
+                180: "MILESTONE: 6 tháng! Nửa năm sinh tồn! Cột mốc đáng nhớ. Bạn giờ đã là 'người cũ' so với mấy đứa mới vào.",
+                210: "INSIGHT: 7 tháng - Lương đã quen, việc đã chán, nhưng nghỉ thì tiếc. Đây chính là bẫy của capitalism!",
+                240: "MILESTONE: 8 tháng! Bạn có thể hoàn thành task trong 1 giờ nhưng sẽ báo cáo là mất 3 ngày. Professional!",
+                270: "INSIGHT: 9 tháng - Skill 'Đoán Ý Sếp' đã unlock. Đôi khi đúng, đôi khi sai, nhưng luôn tỏ vẻ hiểu.",
+                300: "MILESTONE: 10 tháng! Sắp tròn năm! HP tinh thần có thể thấp nhưng kinh nghiệm thì đầy mình.",
+                330: "INSIGHT: 11 tháng - Bạn đã có thể nghe từ 'deadline' mà không còn rùng mình. Impressive!",
+                365: "🎉 ACHIEVEMENT UNLOCKED: 'Survivor 1 Year'! Bạn chính thức là Lão Làng. Phần thưởng: Một cái lưng đau và đôi mắt mỏi.",
+                456: "INSIGHT: 1 năm 3 tháng - Bạn đã quên mất feeling hồi mới đi làm. Giờ chỉ còn numbness. Và đó là bình thường!",
+                548: "MILESTONE: 1.5 năm! Skill 'Automation' đã unlock. Bạn có thể làm việc vừa ngủ gật vừa không ai biết.",
+                639: "INSIGHT: Gần 2 năm - HR bắt đầu gọi bạn là 'talent cần giữ chân'. Nhưng lương thì... bạn biết mà.",
+                730: "🎉 ACHIEVEMENT: 2 NĂM! Bạn giờ là fossil sống. Junior mới vào nhìn bạn như nhìn truyền thuyết.",
+                821: "INSIGHT: 2 năm 3 tháng - Bạn đã có thể predict kết quả của mọi cuộc họp trước khi nó bắt đầu.",
+                912: "MILESTONE: 2.5 năm! Không gì có thể surprise bạn nữa. Office drama? Meh. Deadline gấp? Whatever.",
+                1000: "🎉 LEGENDARY: 1000 NGÀY! Bạn là chiến binh thực thụ. Ngàn ngày, ngàn trận chiến, ngàn cốc cafe.",
+                1095: "🏆 ACHIEVEMENT: 3 NĂM! Bạn có thể viết autobiography: 'Từ Newbie Đến Huyền Thoại: 1095 Ngày Sinh Tồn'.",
+                1186: "INSIGHT: 3+ năm - Sếp hỏi ý kiến bạn trong họp. Không phải vì bạn giỏi, mà vì bạn là người duy nhất còn nhớ context.",
+                1277: "MILESTONE: 3.5 năm! Skill 'Vô Cảm' đã đạt MAX. Tin 'công ty restructure' không làm bạn mất ngủ nữa.",
+                1368: "INSIGHT: Gần 4 năm - Bạn có thể estimate task chính xác đến từng giờ. Một siêu năng lực hiếm có!",
+                1460: "🏆 ACHIEVEMENT: 4 NĂM! Đại Lão! Bạn đã chứng kiến ít nhất 3 wave 'company culture transformation'.",
+                1551: "INSIGHT: 4+ năm - Bạn nhớ tên tất cả CEO, CFO, CTO đã đến và đi. Nhưng bạn thì vẫn ở đây!",
+                1642: "MILESTONE: 4.5 năm! Bạn có thể dạy sếp cách dùng Excel. Đôi khi còn phải dạy cả PowerPoint.",
+                1733: "INSIGHT: Gần 5 năm - Intern mới vào nghĩ bạn là 'founding member'. Bạn quyết định không sửa.",
+                1825: "🏆🏆 LEGENDARY: 5 NĂM! Cổ Thụ! Bạn đã ở đây lâu hơn cả cái máy in trong góc văn phòng.",
+                1916: "INSIGHT: 5+ năm - Bạn có folder 'Template Email' có thể trả lời 90% email mà không cần suy nghĩ.",
+                2007: "MILESTONE: 5.5 năm! Cảm xúc đã biến mất. Bạn làm việc như robot nhưng với salary của human.",
+                2098: "INSIGHT: Gần 6 năm - Bạn đã giác ngộ: Công ty cần bạn hơn bạn cần công ty. Power shift!",
+                2190: "🏆🏆 GODLIKE: 6 NĂM! Thần Thánh! Khi bạn nghỉ phép, 3 người phải làm thay. Bạn là irreplaceable!",
+                2281: "INSIGHT: 6+ năm - Skill 'Say No' đã MAX. Bạn có thể từ chối task mà vẫn được khen professional.",
+                2372: "MILESTONE: 6.5 năm! Bạn điều khiển thời gian - deadline tự động dời khi bạn yêu cầu.",
+                2463: "INSIGHT: Gần 7 năm - Bạn đã vượt qua mọi giới hạn. OT không còn ý nghĩa. WLB là way of life.",
+                2555: "🏆🏆🏆 ANCIENT: 7 NĂM! Cổ Đại! Bạn nhớ thời còn dùng Windows XP ở văn phòng.",
+                2646: "INSIGHT: 7+ năm - Bạn đã lên tiên. Meeting tự cancel khi thấy bạn trong invite list.",
+                2737: "🏆🏆🏆 SUPREME: 100 LEVEL! Tối Thượng! Bạn là living documentation của công ty.",
+                2920: "MILESTONE: 8 NĂM! Siêu Việt! Junior nghĩ bạn là co-founder. Bạn không correct vì mệt.",
+                3102: "INSIGHT: 8+ năm - Bạn đã vượt trên tất cả. CEO hỏi ý kiến bạn trước khi quyết định lớn.",
+                3285: "🏆🏆🏆 INVINCIBLE: 9 NĂM! Vô Địch! Không ai dám fire bạn. Bạn biết quá nhiều secrets.",
+                3467: "INSIGHT: Gần 10 năm - Countdown đến legendary 10 year mark. Chuẩn bị party!",
+                3650: "👑 ULTIMATE ACHIEVEMENT: 10 NĂM! HÓA THẠCH VĨNH CỬU! Bạn là huyền thoại. Tượng đài. Museum artifact!"
+            };
+
+            // Check for special day-of-week events first
+            if (today === 1) {
+                log = "SỰ KIỆN TUẦN: 'Thứ Hai Đen Tối'. Debuff: Giảm 50% Mana, tăng 200% độ buồn ngủ. Skill 'Cà Phê' recommended!";
+            } else if (today === 5) {
+                log = "SỰ KIỆN SẮP TỚI: 'Cuối Tuần Hạnh Phúc'. Buff: Hồi phục 100% HP nếu không bị Sếp gọi. Pray hard!";
+            } else if (today === 3) {
+                log = "SỰ KIỆN: 'Thứ Tư Giữa Tuần'. Bạn đã đi được nửa đường. 50% completed. Keep going, warrior!";
+            }
+            // Check for milestone quotes
+            else if (milestoneQuotes[days]) {
+                log = milestoneQuotes[days];
+            }
+            // Generate random combat log for other days
             else {
-                const monsters = ["Trùm Cuối (Sếp)", "Quái Tinh Anh (KH)", "NPC Đồng Nghiệp", "Quái Vật Deadline", "Máy In Hỏng"];
-                const actions = ["vừa tung chiêu AOE 'Họp Gấp'", "đang cast phép 'Sửa Gấp'", "đang niệm chú 'Lương Chưa Về'", "đã gây sát thương chí mạng vào tim"];
-                const effects = ["khiến bạn choáng 3s.", "gây mất 100 Gold (Trà Sữa).", "nhưng bạn đã né được bằng skill 'Giả Ngơ'.", "HP tinh thần giảm nhẹ."];
+                const monsters = [
+                    "Trùm Cuối (Sếp)", 
+                    "Quái Tinh Anh (KH khó tính)", 
+                    "NPC Đồng Nghiệp Hay Complain", 
+                    "Quái Vật Deadline", 
+                    "Máy In Hỏng Muôn Thuở",
+                    "Boss Email Lúc 11PM",
+                    "Mini Boss Meeting Kéo Dài",
+                    "Elite Mob Task Unclear",
+                    "Rare Spawn Bug Production",
+                    "Legendary Mob Scope Creep"
+                ];
+                const actions = [
+                    "vừa tung chiêu AOE 'Họp Gấp'",
+                    "đang cast phép 'Sửa Gấp Không Có Spec'",
+                    "đang niệm chú 'Lương Chưa Về'",
+                    "đã gây sát thương chí mạng vào tinh thần",
+                    "vừa drop quest 'Việc Thêm Cuối Ngày'",
+                    "đang buff team bằng 'Họp 2 Tiếng'",
+                    "cast ultimate 'Change Request Phút Chót'",
+                    "summon minion 'Task Không Ai Muốn Làm'"
+                ];
+                const effects = [
+                    "khiến bạn choáng 3s.",
+                    "gây mất 100 Gold (Trà Sữa).",
+                    "nhưng bạn đã né được bằng skill 'Giả Ngơ'.",
+                    "HP tinh thần giảm 15%.",
+                    "nhưng bạn counter bằng 'Reply: Noted, Thanks!'",
+                    "bạn sử dụng item 'Cafe' để hồi phục.",
+                    "critical hit! Weekend plans cancelled.",
+                    "bạn immune vì đã MAX level 'Chai Sạn'."
+                ];
                 
                 const mIdx = days % monsters.length;
                 const aIdx = (days + 1) % actions.length;
